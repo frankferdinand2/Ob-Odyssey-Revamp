@@ -190,9 +190,11 @@ public class ShellUniverse implements Universe {
             String type = t[0];
 
             switch (type) {
-                case "Spike":
-                    if (t.length != 5) break;
-                    return new SpikeSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]), Double.parseDouble(t[3]), Double.parseDouble(t[4]));
+            case "Spike":
+                if (t.length < 5 || t.length > 6) break;
+
+                String imgPath = (t.length == 6 && !t[5].isEmpty()) ? t[5] : "res/red.jpg";
+                return new SpikeSprite(Double.parseDouble(t[1]),Double.parseDouble(t[2]),Double.parseDouble(t[3]),Double.parseDouble(t[4]),imgPath);
                 case "Floor":
                     if (t.length != 5) break;
                     return new FloorSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]), Double.parseDouble(t[3]), Double.parseDouble(t[4]));

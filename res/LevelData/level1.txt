@@ -1,8 +1,8 @@
 ObSpeed 700
 WallSpeed 650
 
-Spike 800 -375 1000 540
-Spike 800 275 1000 140
+Spike 800 -375 1000 540 res/lambo.jpg
+Spike 800 275 1000 140 res/Cow.jpg
 Floor 800 275 500 150
 
 Spike 2500 275 1000 640

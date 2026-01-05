@@ -6,8 +6,6 @@ import javax.imageio.ImageIO;
 public class ObSprite implements DisplayableSprite {
 
     private static final String IMAGE_PATH = "res/SpriteImages/ObSprite.png";
-    private static final String FLAPPY_IMAGE_PATH = "res/Tralala.jpg";
-    private static final String REVERSE_FLAPPY_IMAGE_PATH = "res/ferrari.jpg";
 
 
     private static final double DEFAULT_WIDTH = 85.0;
@@ -24,8 +22,6 @@ public class ObSprite implements DisplayableSprite {
     double JET_BATTERY = 67676767676767676767676767676767.0;
 
     private static Image normalImage;
-    private static Image flappyImage;
-    private static Image reverseFlappyImage;
 
     private Image currentImage;
     private double gravity;
@@ -51,12 +47,6 @@ public class ObSprite implements DisplayableSprite {
         try {
             if (normalImage == null) {
             	normalImage = ImageIO.read(new File(IMAGE_PATH));
-            }
-            if (flappyImage == null) {
-            	flappyImage = ImageIO.read(new File(FLAPPY_IMAGE_PATH));
-            }
-            if (reverseFlappyImage == null) {
-            	reverseFlappyImage = ImageIO.read(new File(REVERSE_FLAPPY_IMAGE_PATH));
             }
 
         } catch (IOException e) {
@@ -180,12 +170,9 @@ public class ObSprite implements DisplayableSprite {
                 gravity = -DEFAULT_GRAVITY;
                 jetPower = -DEFAULT_JET_POWER;
                 
-                if (flappyMode) {
-                	currentImage = reverseFlappyImage;
-                }
-                else {
-                    currentImage = ImageRotator.rotate(normalImage, 270);
-                }
+
+                currentImage = ImageRotator.rotate(normalImage, 270);
+                
             }
 
             if (sprite instanceof FloorSprite && checkCollision(sprite)) {
@@ -214,12 +201,6 @@ public class ObSprite implements DisplayableSprite {
             
             if (sprite instanceof FlappyBirdPortalSprite && checkCollision(sprite) && !flappyMode) {
                 flappyMode = true;
-                if (reversed) {
-                	currentImage = reverseFlappyImage;
-                }
-                else {
-                	currentImage = flappyImage;
-                }
             }
             if ((sprite instanceof WallSprite || sprite instanceof SpikeSprite) && checkCollision(sprite)) {
             	dispose = true;

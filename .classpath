@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="Kael-Jude-CS-Project-b49f3f8d9330c409d5c28f1bcdb796940a39e5cf/animations"/>
+	<classpathentry kind="src" path="Kael-Jude-CS-Project-b49f3f8d9330c409d5c28f1bcdb796940a39e5cf/backgrounds"/>
+	<classpathentry kind="src" path="Kael-Jude-CS-Project-b49f3f8d9330c409d5c28f1bcdb796940a39e5cf/gui"/>
+	<classpathentry kind="src" path="Kael-Jude-CS-Project-b49f3f8d9330c409d5c28f1bcdb796940a39e5cf/main"/>
+	<classpathentry kind="src" path="Kael-Jude-CS-Project-b49f3f8d9330c409d5c28f1bcdb796940a39e5cf/sprites"/>
+	<classpathentry kind="src" path="Kael-Jude-CS-Project-b49f3f8d9330c409d5c28f1bcdb796940a39e5cf/universes"/>
+	<classpathentry kind="src" path="Kael-Jude-CS-Project-b49f3f8d9330c409d5c28f1bcdb796940a39e5cf/utilities"/>
+	<classpathentry kind="output" path="Kael-Jude-CS-Project-b49f3f8d9330c409d5c28f1bcdb796940a39e5cf/bin"/>
+</classpath>
