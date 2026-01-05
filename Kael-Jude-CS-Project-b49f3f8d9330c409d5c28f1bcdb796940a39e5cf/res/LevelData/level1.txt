@@ -1,0 +1,35 @@
+ObSpeed 700
+WallSpeed 650
+
+Spike 800 -375 1000 540
+Spike 800 275 1000 140
+Floor 800 275 500 150
+
+Spike 2500 275 1000 640
+Spike 2500 -375 1000 140
+Floor 2500 -375 500 180
+
+ReverseGravityPortal 800 50
+StatusRemover 2900 -150
+FlappyBirdPortal 3600 -200 200 200
+# flap bird section
+Spike 3800 275 150 640
+Spike 3800 -375 150 140
+Spike 4300 -600 150 640
+Spike 4300 300 150 500
+Spike 5300 -700 150 640
+Spike 5300 200 150 500
+Spike 5800 -700 150 640
+Spike 5800 200 150 500
+Spike 6300 -600 150 640
+Spike 6300 300 150 500
+Spike 6800 -400 150 640
+Spike 6800 400 150 500
+Spike 7800 -200 150 500
+Spike 7800 500 150 500
+
+ReverseGravityPortal 6300 0
+StatusRemover 8500 0
+LevelEnding 9000 0 100 100
+
+Wall -1000 0
