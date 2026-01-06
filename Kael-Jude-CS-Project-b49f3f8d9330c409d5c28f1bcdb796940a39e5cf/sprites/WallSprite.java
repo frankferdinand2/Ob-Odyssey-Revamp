@@ -20,7 +20,8 @@ public class WallSprite implements DisplayableSprite {
 	private boolean wallStart = false;
 	private double wallSpeed;
 	private double obSpeed;
-
+	private double velocityX;
+	
 	public WallSprite(double centerX, double centerY) {
 		this.centerX = centerX;
 		this.centerY = centerY;
@@ -108,33 +109,30 @@ public class WallSprite implements DisplayableSprite {
 		if (wallStart) {
 			centerX += wallSpeed * deltaTime;
 		}
-		
-	    boolean flappyModeActive = false;
-	    
-	    for (DisplayableSprite sprite : universe.getSprites()) {
-	        if (sprite instanceof ObSprite) {
-	            flappyModeActive = ((ObSprite) sprite).getFlappyMode();
-	            break;
-	        }
-	    }
+
 		
 	    KeyboardInput keyboard = KeyboardInput.getKeyboard();
 	    
-	    if (flappyModeActive) {
-	    	wallSpeed = obSpeed;
-	    }
-	    else {
-	    	wallSpeed = originalWallSpeed;
-	    }
+	    wallSpeed = originalWallSpeed;
 
-	    if (keyboard.keyDown(39) || flappyModeActive) { // ob moves right objects move left
-    	   centerX -= obSpeed * deltaTime;
-    	   wallStart = true;
+
+        if (keyboard.keyDown(39)) { // ob moves right objects move left
+        	velocityX -= obSpeed * deltaTime;
+            centerX += velocityX * deltaTime;
         }
-	    
-	    if (keyboard.keyDown(37) && !flappyModeActive) { // and vice versa
-    	   centerX += obSpeed * deltaTime;
-    	   wallStart = true;
-	    }
+        
+        else if (keyboard.keyDown(37)) {
+        	velocityX += obSpeed * deltaTime;
+            centerX += velocityX * deltaTime;
+        }
+        
+        else  if (velocityX > 0) { // and vice versa 
+        	velocityX -= obSpeed * deltaTime;
+            centerX += velocityX * deltaTime;
+        }
+        else if (velocityX < 0) {
+        	velocityX += obSpeed * deltaTime;
+        	centerX += velocityX * deltaTime;
+        }
 	}		
 }

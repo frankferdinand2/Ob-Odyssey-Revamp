@@ -15,6 +15,7 @@ public class SpikeSprite implements DisplayableSprite {
     private boolean dispose;
     private double obSpeed;
     private String imagePath;
+    private double velocityX;
 
     public SpikeSprite(double centerX, double centerY, double width, double height) {
         this(centerX, centerY, width, height, DEFAULT_IMAGE_PATH);
@@ -54,43 +55,83 @@ public class SpikeSprite implements DisplayableSprite {
         return true;
     }
 
-    public double getMinX() { return centerX - (width / 2); }
-    public double getMaxX() { return centerX + (width / 2); }
-    public double getMinY() { return centerY - (height / 2); }
-    public double getMaxY() { return centerY + (height / 2); }
-    public double getHeight() { return height; }
-    public double getWidth() { return width; }
-    public double getCenterX() { return centerX; }
-    public double getCenterY() { return centerY; }
-    public boolean getDispose() { return dispose; }
+    public double getMinX() { 
+    	return centerX - (width / 2); 
+	}
+    
+    public double getMaxX() { 
+    	return centerX + (width / 2); 
+	}
+    
+    public double getMinY() { 
+    	return centerY - (height / 2);
+	}
+    
+    public double getMaxY() {
+    	return centerY + (height / 2);
+	}
+    
+    public double getHeight() { 
+    	return height; 
+	}
+    
+    public double getWidth() { 
+    	return width;
+	}
+    
+    public double getCenterX() {
+    	return centerX;
+	}
+    
+    public double getCenterY() { 
+    	return centerY; 
+	}
+    
+    public boolean getDispose() { 
+    	return dispose; 
+	}
 
-    public void setCenterX(double centerX) { this.centerX = centerX; }
-    public void setCenterY(double centerY) { this.centerY = centerY; }
+    public void setCenterX(double centerX) { 
+    	this.centerX = centerX; 
+	}
+    
+    public void setCenterY(double centerY) { 
+    	this.centerY = centerY; 
+	}
+    
     @Override
-    public void setDispose(boolean dispose) { this.dispose = dispose; }
+    public void setDispose(boolean dispose) { 
+    	this.dispose = dispose; 
+	}
 
-    public void update(Universe universe, long actualDeltaTime) {
-        double deltaTime = actualDeltaTime * 0.001;
+	public void update(Universe universe, long actualDeltaTime) {
+		double deltaTime = actualDeltaTime * 0.001;
+		
+	    ShellUniverse u = (ShellUniverse) universe;
+	    obSpeed = u.getObSpeed();
+	    
+		
+	    KeyboardInput keyboard = KeyboardInput.getKeyboard();
 
-        ShellUniverse u = (ShellUniverse) universe;
-        obSpeed = u.getObSpeed();
 
-        boolean flappyModeActive = false;
-        for (DisplayableSprite sprite : universe.getSprites()) {
-            if (sprite instanceof ObSprite) {
-                flappyModeActive = ((ObSprite) sprite).getFlappyMode();
-                break;
-            }
+
+        if (keyboard.keyDown(39)) { // ob moves right objects move left
+        	velocityX -= obSpeed * deltaTime;
+            centerX += velocityX * deltaTime;
         }
-
-        KeyboardInput keyboard = KeyboardInput.getKeyboard();
-
-        if (keyboard.keyDown(39) || flappyModeActive) { // ob moves right objects move left
-            centerX -= obSpeed * deltaTime;
+        
+        else if (keyboard.keyDown(37)) {
+        	velocityX += obSpeed * deltaTime;
+            centerX += velocityX * deltaTime;
         }
-
-        if (keyboard.keyDown(37) && !flappyModeActive) { // and vice versa 
-            centerX += obSpeed * deltaTime;
+        
+        else  if (velocityX > 0) { // and vice versa 
+        	velocityX -= obSpeed * deltaTime;
+            centerX += velocityX * deltaTime;
         }
-    }
+        else if (velocityX < 0) {
+        	velocityX += obSpeed * deltaTime;
+        	centerX += velocityX * deltaTime;
+        }
+	}
 }

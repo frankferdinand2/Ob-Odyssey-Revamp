@@ -1,5 +1,5 @@
-ObSpeed 700
-WallSpeed 650
+ObSpeed 600
+
 
 Spike 800 -375 1000 540 res/lambo.jpg
 Spike 800 275 1000 140 res/Cow.jpg
@@ -32,4 +32,4 @@ ReverseGravityPortal 6300 0
 StatusRemover 8500 0
 LevelEnding 9000 0 100 100
 
-Wall -1000 0
+
