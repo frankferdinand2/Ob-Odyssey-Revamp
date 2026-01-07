@@ -12,6 +12,7 @@ public class ShellUniverse implements Universe {
     
     private double obSpeed;
     private double wallSpeed;
+    private double jetpackBattery;
     private String currentLevelPath;
     private boolean resetLevel = false;
     private String[] levels = {"res/LevelData/level1.txt", "res/LevelData/level2.txt"};
@@ -34,6 +35,10 @@ public class ShellUniverse implements Universe {
 
     public double getWallSpeed() {
         return wallSpeed;
+    }
+    
+    public double getJetpackBattery() {
+    	return jetpackBattery;
     }
     
     public double getScale() {
@@ -148,6 +153,11 @@ public class ShellUniverse implements Universe {
                 
                 if (tokens[0].equals("ObSpeed")) {
                     obSpeed = Double.parseDouble(tokens[1]);
+                    continue;
+                }
+                
+                if (tokens[0].equals("JetpackBattery")) {
+                    jetpackBattery = Double.parseDouble(tokens[1]);
                     continue;
                 }
 
