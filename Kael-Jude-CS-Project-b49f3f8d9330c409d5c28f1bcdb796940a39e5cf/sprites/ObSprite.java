@@ -19,7 +19,7 @@ public class ObSprite implements DisplayableSprite {
     private boolean flappyMode = false;
     private double flapVelocity = -300; 
     
-    private double jetBattery = 0;
+    private double jetBattery = 2000;
 
     private static Image normalImage;
 
@@ -132,22 +132,25 @@ public class ObSprite implements DisplayableSprite {
     public void setDispose(boolean dispose) { 
     	this.dispose = dispose; 
 	}
-
+    
+    private boolean found = false;
+    
     public void update(Universe universe, long actualDeltaTime) {
         double deltaTime = actualDeltaTime * 0.001;
-       
 		ShellUniverse u = (ShellUniverse) universe;
-		if (jetBattery == -1) {
-			jetBattery = u.getJetpackBattery();
 
-		}
+        if (!found) {
+        	jetBattery = u.getJetpackBattery();
+        	found = true;
+        }
 		
         KeyboardInput keyboard = KeyboardInput.getKeyboard();
         boolean jetActive = keyboard.keyDown(38) && jetBattery > 0;
-
+        
         if (jetActive && !flappyMode) { 
             velocityY += jetPower * deltaTime;
-            jetBattery -= actualDeltaTime;
+            jetBattery -= deltaTime; 
+            if (jetBattery < 0) jetBattery = 0;
         }
         
         if (flappyMode) {

@@ -1,5 +1,9 @@
 ObSpeed 600
+<<<<<<< HEAD
 JetpackBattery 2000
+=======
+JetpackBattery 5
+>>>>>>> branch 'main' of https://github.com/frankferdinand2/Ob-Odyssey-Revamp.git
 
 # <object type> <x position> <y position> <width> <height> <image path>
 
