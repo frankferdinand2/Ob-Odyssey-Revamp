@@ -1,46 +1,30 @@
-ObSpeed 1000
-WallSpeed 975
+ObSpeed 600
 
-Spike 800 -375 1000 540
-Spike 800 275 1000 140
-Floor 800 275 500 150
-
-Spike 2500 275 1000 640
-Spike 2500 -375 1000 140
-Floor 2500 -375 500 180
-
-Spike 4500 -375 1000 540
-Spike 4500 275 1000 140
-Floor 4500 275 500 150
-
-ReverseGravityPortal 800 50
-
-FlappyBirdPortal 5600 -100 200 200
+# <object type> <x position> <y position> <width> <height> <image path>
 
 
-Spike 5800 -600 150 640
-Spike 5800 300 150 500
-Spike 8300 -400 150 640
-Spike 8300 400 150 500
-Spike 10300 -200 150 500
-Spike 10300 500 150 500
 
-StatusRemover 12500 50
-ReverseGravityPortal 13000 50
+Floor 800 240 850 160
 
-Spike 13200 -375 1000 540
-Spike 13200 275 1000 140
-Spike 14000 -375 1000 540
-Spike 14000 275 1000 140
-Spike 15000 -325 1000 540
-Spike 15000 225 1000 140
-
-Spike 18000 275 1000 640
-Spike 18000 -375 1000 140
-Spike 19000 200 1000 640
-Spike 19000 -300 1000 140
+Spike 400 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
+Spike 1200 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
 
 
-LevelEnding 20000 0 500 500
+Spike 2200 -260 200 200 res/SpriteImages/SpikeImages/Box200x200.png
 
-Wall -1000 0
+Spike 2000 270 100 100 res/SpriteImages/SpikeImages/Box100x100.png
+Spike 2150 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
+Spike 2200 70 100 100 res/SpriteImages/SpikeImages/Box100x100.png
+
+
+Spike 2150 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
+
+
+
+
+
+
+
+LevelEnding 15000 0 500 500
+
+

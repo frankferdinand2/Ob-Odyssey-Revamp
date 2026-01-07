@@ -14,7 +14,7 @@ public class ShellUniverse implements Universe {
     private double wallSpeed;
     private String currentLevelPath;
     private boolean resetLevel = false;
-    private String[] levels = {"res/LevelData/level1.txt", "res/LevelData/level2.txt"};
+    private String[] levels = {"res/LevelData/level2.txt", "res/LevelData/level1.txt", "res/LevelData/level2.txt"};
     private int currentLevelIndex = 0;
     private boolean nextLevel = false;
 
