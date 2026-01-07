@@ -133,5 +133,12 @@ public class SpikeSprite implements DisplayableSprite {
         	velocityX += obSpeed * deltaTime;
         	centerX += velocityX * deltaTime;
         }
+        
+        if (velocityX < 0 && velocityX > -1) {
+        	velocityX = 0;
+        }
+        if (velocityX > 0 && velocityX < 1) {
+        	velocityX = 0;
+        }
 	}
 }
