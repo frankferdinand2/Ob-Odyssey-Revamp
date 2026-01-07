@@ -57,7 +57,7 @@ Spike 7100 -50 100 100 res/SpriteImages/SpikeImages/Box100x100.png
 
 Spike 6700 -260 200 200 res/SpriteImages/SpikeImages/Box200x200.png
 
-Spike 7500 270 100 100 res/SpriteImages/SpikeImages/Box100x100.png
+Spike 7500 270 100 100 res/SpriteImages/SpikeImages/nerd.png
 Spike 7650 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
 
 LevelEnding 8200 0 500 500
