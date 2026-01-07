@@ -19,7 +19,7 @@ public class ObSprite implements DisplayableSprite {
     private boolean flappyMode = false;
     private double flapVelocity = -300; 
     
-    private double jetBattery = -1;
+    private double jetBattery = 0;
 
     private static Image normalImage;
 

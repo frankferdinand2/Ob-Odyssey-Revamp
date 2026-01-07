@@ -127,13 +127,13 @@ public class JetpackSprite implements DisplayableSprite {
         }
         
         KeyboardInput keyboard = KeyboardInput.getKeyboard();
-		ShellUniverse u = (ShellUniverse) universe;
-		boolean animation = true;
+        
+		boolean animation = false;
 		
         for (DisplayableSprite sprite : universe.getSprites()) {
         	if (sprite instanceof ObSprite) {
-        		if (((ObSprite) sprite).getJetBattery() < 0) {
-        			animation = false;
+        		if (((ObSprite) sprite).getJetBattery() > 0) {
+        			animation = true;
         		}
         	}
         }
