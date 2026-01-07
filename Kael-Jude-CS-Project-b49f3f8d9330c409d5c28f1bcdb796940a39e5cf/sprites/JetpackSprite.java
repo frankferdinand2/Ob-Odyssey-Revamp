@@ -127,35 +127,51 @@ public class JetpackSprite implements DisplayableSprite {
         }
         
         KeyboardInput keyboard = KeyboardInput.getKeyboard();
-
-        if (keyboard.keyDown(38) && !flappyMode) {
-        	timeKeyUp++;
+		ShellUniverse u = (ShellUniverse) universe;
+		boolean animation = true;
+		
+        for (DisplayableSprite sprite : universe.getSprites()) {
+        	if (sprite instanceof ObSprite) {
+        		if (((ObSprite) sprite).getJetBattery() < 0) {
+        			animation = false;
+        		}
+        	}
+        }
+        
+        if (animation) {
+        	 if (keyboard.keyDown(38) && !flappyMode) {
+             	timeKeyUp++;
+             }
+             else {
+             	timeKeyUp = 0;
+             }
+             
+             
+             if (timeKeyUp == 0) {
+             	imageOn = normalImage;
+             }
+             else if (timeKeyUp > 3) {
+             	int check = timeKeyUp % 10;
+             	if (check > 5) {
+             		imageOn = frame3Image;
+             	}
+             	else {
+             		imageOn = frame2Image;
+             	}
+             }
+             else {
+             	imageOn = frame1Image;
+             }
+             
+             
+             if (keyboard.keyDownOnce(38) && flappyMode) {
+             	imageOn = frame3Image;
+             }
         }
         else {
-        	timeKeyUp = 0;
-        }
-        
-        
-        if (timeKeyUp == 0) {
         	imageOn = normalImage;
         }
-        else if (timeKeyUp > 3) {
-        	int check = timeKeyUp % 10;
-        	if (check > 5) {
-        		imageOn = frame3Image;
-        	}
-        	else {
-        		imageOn = frame2Image;
-        	}
-        }
-        else {
-        	imageOn = frame1Image;
-        }
-        
-        
-        if (keyboard.keyDownOnce(38) && flappyMode) {
-        	imageOn = frame3Image;
-        }
+       
         
         if (reversed) {
         	currentImage = ImageRotator.rotate(imageOn, 270);

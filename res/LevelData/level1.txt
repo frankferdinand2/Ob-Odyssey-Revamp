@@ -6,6 +6,7 @@ ObSpeed 600
 Spike 300 270 100 100 res/SpriteImages/SpikeImages/Box100x100.png
 Spike 450 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
 
+
 # ceiling
 Spike 800 -260 200 200 res/SpriteImages/SpikeImages/Box200x200.png
 Spike 1000 -260 200 200 res/SpriteImages/SpikeImages/Box200x200.png

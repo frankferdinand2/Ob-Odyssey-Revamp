@@ -19,7 +19,7 @@ public class ObSprite implements DisplayableSprite {
     private boolean flappyMode = false;
     private double flapVelocity = -300; 
     
-    double JET_BATTERY = 67676767676767676767676767676767.0;
+    private double jetBattery = -1;
 
     private static Image normalImage;
 
@@ -124,19 +124,30 @@ public class ObSprite implements DisplayableSprite {
     	this.velocityY = velocityY; 
 	}
     
+    public double getJetBattery() {
+    	return jetBattery;
+    }
+    
     @Override
-    public void setDispose(boolean dispose) { this.dispose = dispose; }
+    public void setDispose(boolean dispose) { 
+    	this.dispose = dispose; 
+	}
 
     public void update(Universe universe, long actualDeltaTime) {
         double deltaTime = actualDeltaTime * 0.001;
        
+		ShellUniverse u = (ShellUniverse) universe;
+		if (jetBattery == -1) {
+			jetBattery = u.getJetpackBattery();
 
+		}
+		
         KeyboardInput keyboard = KeyboardInput.getKeyboard();
-        boolean jetActive = keyboard.keyDown(38) && JET_BATTERY > 0;
+        boolean jetActive = keyboard.keyDown(38) && jetBattery > 0;
 
         if (jetActive && !flappyMode) { 
             velocityY += jetPower * deltaTime;
-            JET_BATTERY -= actualDeltaTime;
+            jetBattery -= actualDeltaTime;
         }
         
         if (flappyMode) {
@@ -203,9 +214,10 @@ public class ObSprite implements DisplayableSprite {
                 flappyMode = true;
             }
             if ((sprite instanceof WallSprite || sprite instanceof SpikeSprite) && checkCollision(sprite)) {
-            	dispose = true;
-             
-
+            	
+            	if (CollisionDetection.pixelBasedOverlaps(this, sprite)) {
+            		dispose = true;
+            	}
             }
         }
     }
