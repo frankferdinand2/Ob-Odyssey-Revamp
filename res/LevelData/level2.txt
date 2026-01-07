@@ -1,4 +1,5 @@
 ObSpeed 600
+JetpackBattery 2000
 
 # <object type> <x position> <y position> <width> <height> <image path>
 
@@ -17,10 +18,18 @@ Spike 2150 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
 Spike 2200 70 100 100 res/SpriteImages/SpikeImages/Box100x100.png
 
 
-Spike 2150 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
+Spike 3000 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
+Spike 3200 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
+Spike 3400 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
+Spike 3600 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
 
+Spike 3800 120 400 600 res/SpriteImages/SpikeImages/Box200x200.png 
+# gonna be a big plant
 
-
+Spike 4200 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
+Spike 4400 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
+Spike 4600 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
+Spike 4800 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
 
 
 
