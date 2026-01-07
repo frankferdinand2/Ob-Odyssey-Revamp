@@ -125,6 +125,15 @@ public class StatusRemoverSprite implements DisplayableSprite {
         	velocityX += obSpeed * deltaTime;
         	centerX += velocityX * deltaTime;
         }
-	}				
+        
+        
+        // small bugfix to fix micro movements
+        if (velocityX < 0 && velocityX > -1) {
+        	velocityX = 0;
+        }
+        if (velocityX > 0 && velocityX < 1) {
+        	velocityX = 0;
+        }	
+	}
 		
 }
