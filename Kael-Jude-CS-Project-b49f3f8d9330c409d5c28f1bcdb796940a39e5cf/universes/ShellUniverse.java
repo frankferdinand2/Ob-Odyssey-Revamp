@@ -219,9 +219,23 @@ public class ShellUniverse implements Universe {
        for (int i = 0; i < count; i++) {
            double x = lastSpawnX + 600 + i * 250;
            double y = 0 + rand.nextDouble() * 400;
+           if (rand.nextInt(2) == 0) {
+        	   y = y * -1;
+           }
            double width = 200;
            double height = 200;
-           if (rand.nextInt(5) == 4) { // small chance at portal spawn
+           if (rand.nextInt(3) == 2) {
+        	   String img = "res/SpriteImages/SpikeImages/Box200x200.png";
+        	   SpikeSprite spike = new SpikeSprite(x, y, width, height, img);
+        	   FloorSprite floor = new FloorSprite(x, y, width-50, height + 25);
+        	   pendingSprites.add(spike);
+        	   pendingSprites.add(floor);
+        	   infiniteSprites.add(floor);
+        	   infiniteSprites.add(spike);
+               
+               
+           }
+           else if (rand.nextInt(5) == 4) { // small chance at portal spawn
                DisplayableSprite portal = null;
                ArrayList<DisplayableSprite> possible = new ArrayList<>();
 
@@ -234,8 +248,34 @@ public class ShellUniverse implements Universe {
                possible.add(new StatusRemoverSprite(x, 0));
 
                portal = possible.get(rand.nextInt(possible.size()));
+               if (rand.nextInt(2) == 0) {
+            	   SpikeSprite spikeA = new SpikeSprite(x, 250, width, height, "res/SpriteImages/SpikeImages/Box200x200.png");
+                   SpikeSprite spikeB = new SpikeSprite(x, -250, width, height, "res/SpriteImages/SpikeImages/Box200x200.png");
+                   pendingSprites.add(spikeA);
+                   pendingSprites.add(spikeB);
+                   infiniteSprites.add(spikeA);
+                   infiniteSprites.add(spikeB);
+               }
+               else {
+            	   SpikeSprite spikeA = new SpikeSprite(x, 250, width, height, "res/SpriteImages/SpikeImages/Box200x200.png");
+                   SpikeSprite spikeB = new SpikeSprite(x, -250, width, height, "res/SpriteImages/SpikeImages/Box200x200.png");
+                   FloorSprite floorA = new FloorSprite(x, 250, 150, 225);
+                   FloorSprite floorB = new FloorSprite(x, -250, 150, 225);
+                   pendingSprites.add(spikeA);
+                   pendingSprites.add(spikeB);
+                   pendingSprites.add(floorA);
+                   pendingSprites.add(floorB);
+                   infiniteSprites.add(floorA);
+                   infiniteSprites.add(floorB);
+                   infiniteSprites.add(spikeA);
+                   infiniteSprites.add(spikeB);
+                   
+               }
+               
                pendingSprites.add(portal);
+
                infiniteSprites.add(portal);
+               ;
            } else { // spawn spikes
                String img = "res/SpriteImages/SpikeImages/Box200x200.png";
                SpikeSprite spike = new SpikeSprite(x, y, width, height, img);
