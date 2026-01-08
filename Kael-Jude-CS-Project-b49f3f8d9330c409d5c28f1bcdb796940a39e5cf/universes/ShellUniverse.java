@@ -222,24 +222,18 @@ public class ShellUniverse implements Universe {
            double width = 200;
            double height = 200;
            if (rand.nextInt(5) == 4) { // small chance at portal spawn
-               int portalType;
-               if (flappy || reversed) {
-                   portalType = rand.nextInt(3);
-               } else {
-                   portalType = rand.nextInt(2);
-               }
                DisplayableSprite portal = null;
-               switch (portalType) {
-                   case 0:
-                       portal = new ReverseGravityPortalSprite(x, 0);
-                       break;
-                   case 1:
-                       portal = new FlappyBirdPortalSprite(x, 0, width, height);
-                       break;
-                   case 2:
-                       portal = new StatusRemoverSprite(x, 0);
-                       break;
-               }
+               ArrayList<DisplayableSprite> possible = new ArrayList<>();
+
+               if (!reversed)
+                   possible.add(new ReverseGravityPortalSprite(x, 0));
+
+               if (!flappy)
+                   possible.add(new FlappyBirdPortalSprite(x, 0, width, height));
+
+               possible.add(new StatusRemoverSprite(x, 0));
+
+               portal = possible.get(rand.nextInt(possible.size()));
                pendingSprites.add(portal);
                infiniteSprites.add(portal);
            } else { // spawn spikes
