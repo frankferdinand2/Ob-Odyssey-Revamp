@@ -16,6 +16,10 @@ public class SpikeSprite implements DisplayableSprite {
 	private double obSpeed;
 	private String imagePath;
 	private double velocityX;
+	
+	public double getVelocityX() {
+		return velocityX;
+	}
 
 	public SpikeSprite(double centerX, double centerY, double width, double height) {
 		this(centerX, centerY, width, height, DEFAULT_IMAGE_PATH);

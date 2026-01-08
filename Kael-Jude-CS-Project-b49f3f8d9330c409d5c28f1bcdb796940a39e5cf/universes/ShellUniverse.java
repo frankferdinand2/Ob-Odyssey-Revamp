@@ -2,267 +2,261 @@ import java.util.ArrayList;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-
+import java.util.Random;
 public class ShellUniverse implements Universe {
-    private boolean complete = false;    
-
-    private ArrayList<DisplayableSprite> sprites = new ArrayList<>();
-    private ArrayList<Background> backgrounds = new ArrayList<>();
-    private ArrayList<DisplayableSprite> disposalList = new ArrayList<>();
-    
-    private double obSpeed;
-    private double wallSpeed;
-    private double jetpackBattery;
-    private String currentLevelPath;
-    private boolean resetLevel = false;
-    private String[] levels = {"res/LevelData/level2.txt", "res/LevelData/level1.txt", "res/LevelData/level2.txt"};
-    private int currentLevelIndex = 0;
-    private boolean nextLevel = false;
-
-    public ShellUniverse () {
-        this.setXCenter(0);
-        this.setYCenter(0);
-        currentLevelPath = levels[0];
-
-        if (!loadLevel(currentLevelPath)) {
-            throw new RuntimeException("Level failed to load");
-        }
-    }
-    
-    public double getObSpeed() {
-        return obSpeed;
-    }
-
-    public double getWallSpeed() {
-        return wallSpeed;
-    }
-    
-    public double getJetpackBattery() {
-    	return jetpackBattery;
-    }
-    
-    public double getScale() {
-        return 1;
-    }
-
-    public double getXCenter() {
-        return 0;
-    }
-
-    public double getYCenter() {
-        return 0;
-    }
-
-    public void setXCenter(double xCenter) {
-
-    }
-
-    public void setYCenter(double yCenter) {
-
-    }
-
-    public boolean isComplete() {
-        return complete; 
-    }
-
-    public void setComplete(boolean complete) {
-        complete = true;
-    }
-
-    public ArrayList<Background> getBackgrounds() {
-        return backgrounds;
-    }    
-
-    public ArrayList<DisplayableSprite> getSprites() {
-        return sprites;
-    }
-
-    public boolean centerOnPlayer() {
-        return false;
-    }        
-
-    public void update(Animation animation, long actual_delta_time) {
-        for (int i = 0; i < sprites.size(); i++) {
-            DisplayableSprite sprite = sprites.get(i);
-            sprite.update(this, actual_delta_time);
-
-            if (sprite instanceof ObSprite) {
-                ObSprite ob = (ObSprite) sprite;
-                if (ob.getLevelComplete()) {
-                    nextLevel = true;
-                    ob.setDispose(true);
-                }
-            }
-
-            if (sprite instanceof ObSprite && sprite.getDispose()) {
-                resetLevel = true;
-            }
-
-            if (resetLevel) {
-                resetLevel();
-            }
-
-            if (nextLevel) {
-                nextLevel();
-                return;
-            }
-        }
-        disposeSprites();
-    }
-
-    protected void disposeSprites() {
-        for (int i = 0; i < sprites.size(); i++) {
-            DisplayableSprite sprite = sprites.get(i);
-            if (sprite.getDispose() == true) {
-                disposalList.add(sprite);
-            }
-        }
-        for (int i = 0; i < disposalList.size(); i++) {
-            DisplayableSprite sprite = disposalList.get(i);
-            sprites.remove(sprite);
-        }
-        if (disposalList.size() > 0) {
-            disposalList.clear();
-        }
-    }
-
-    public String toString() {
-        return "ShellUniverse";
-    }
-
-    private boolean loadLevel(String path) {
-        ArrayList<DisplayableSprite> loadedSprites = new ArrayList<>();
-        boolean hasLevelEnd = false;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            String line;
-            int lineNumber = 0;
-
-            while ((line = br.readLine()) != null) {
-                lineNumber++;
-                line = line.trim();
-
-                if (line.isEmpty() || line.startsWith("#")) continue;
-
-                String[] tokens = line.split("\\s+"); // ignore spaces 
-
-                if (tokens[0].equals("Ob")) {
-                    System.out.println("Ob must not be defined in level file");
-                    return false;
-                }
-                
-                if (tokens[0].equals("ObSpeed")) {
-                    obSpeed = Double.parseDouble(tokens[1]);
-                    continue;
-                }
-                
-                if (tokens[0].equals("JetpackBattery")) {
-                    jetpackBattery = Double.parseDouble(tokens[1]);
-                    continue;
-                }
-
-                if (tokens[0].equals("WallSpeed")) {
-                    wallSpeed = Double.parseDouble(tokens[1]);
-                    continue;
-                }
-                
-                DisplayableSprite sprite = parseSprite(tokens, lineNumber);
-                
-                if (sprite == null) return false;
-
-                if (sprite instanceof LevelEndSprite) {
-                    hasLevelEnd = true;
-                }
-                
-
-                loadedSprites.add(sprite);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        if (!hasLevelEnd) {
-            System.err.println("Level load failed: No LevelEnding sprite found.");
-            return false;
-        }
-
-        sprites.clear();
-        sprites.addAll(loadedSprites);
-        sprites.add(new JetpackSprite(-400,0));
-        sprites.add(new ObSprite(-400, 0));
-        return true;
-    }
-
-    private DisplayableSprite parseSprite(String[] t, int lineNumber) {
-        try {
-            String type = t[0];
-
-            switch (type) {
-            case "Spike":
-                if (t.length < 5 || t.length > 6) break;
-
-                String imgPath = (t.length == 6 && !t[5].isEmpty()) ? t[5] : "res/red.jpg";
-                return new SpikeSprite(Double.parseDouble(t[1]),Double.parseDouble(t[2]),Double.parseDouble(t[3]),Double.parseDouble(t[4]),imgPath);
-                case "Floor":
-                    if (t.length != 5) break;
-                    return new FloorSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]), Double.parseDouble(t[3]), Double.parseDouble(t[4]));
-
-
-                case "Wall":
-                    if (t.length != 3) break;
-                    return new WallSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]));
-
-                case "StatusRemover":
-                    if (t.length != 3) break;
-                    return new StatusRemoverSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]));
-
-                case "ReverseGravityPortal":
-                    if (t.length != 3) break;
-                    return new ReverseGravityPortalSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]));
-
-                case "LevelEnding":
-                    if (t.length != 5) break;
-                    return new LevelEndSprite(
-                        Double.parseDouble(t[1]), Double.parseDouble(t[2]), Double.parseDouble(t[3]), Double.parseDouble(t[4]));
-                case "FlappyBirdPortal":
-                    if (t.length != 5) break;
-                    return new FlappyBirdPortalSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]), Double.parseDouble(t[3]), Double.parseDouble(t[4]));
-                    
-            }
-
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid number at line " + lineNumber);
-            return null;
-        }
-
-        System.out.println("Invalid sprite definition at line " + lineNumber);
-        return null;
-    }
-
-    private void resetLevel() {
-        resetLevel = false;
-        sprites.clear();
-        loadLevel(currentLevelPath);
-    }
-
-    private void nextLevel() {
-        nextLevel = false;            
-        sprites.clear();               
-        currentLevelIndex++;           
-
-        if (currentLevelIndex >= levels.length) {
-            complete = true;           
-            return;
-        }
-
-        currentLevelPath = levels[currentLevelIndex];
-
-        boolean loaded = loadLevel(currentLevelPath);
-        
-        if (!loaded) {
-            throw new RuntimeException("Failed to load next level: " + currentLevelPath);
-        }
-    }
+   private boolean complete = false;   
+   private ArrayList<DisplayableSprite> sprites = new ArrayList<>();
+   private ArrayList<Background> backgrounds = new ArrayList<>();
+   private ArrayList<DisplayableSprite> disposalList = new ArrayList<>();
+   private ArrayList<DisplayableSprite> infiniteSprites = new ArrayList<>();
+   private ArrayList<DisplayableSprite> pendingSprites = new ArrayList<>();
+   private double lastSpawnX = 0; // infinite mode so spikes dont spawn on top eachother
+   private double obSpeed;
+   private double wallSpeed;
+   private double jetpackBattery;
+   private String currentLevelPath;
+   private boolean resetLevel = false;
+   private String[] levels = {"res/LevelData/level2.txt", "res/LevelData/level1.txt", "res/LevelData/level2.txt"};
+   private int currentLevelIndex = 0;
+   private boolean nextLevel = false;
+   private boolean mainScreen = false;
+   private boolean infiniteMode = false;
+   private long spawnTimer = 0;
+   private boolean flappy;
+   private boolean reversed;
+   public ShellUniverse() {
+       this.setXCenter(0);
+       this.setYCenter(0);
+       currentLevelPath = levels[0];
+       if (!loadLevel(currentLevelPath)) {
+           throw new RuntimeException("Level failed to load");
+       }
+   }
+   public double getObSpeed() { return obSpeed; }
+   public double getWallSpeed() { return wallSpeed; }
+   public double getJetpackBattery() { return jetpackBattery; }
+   public double getScale() { return 1; }
+   public double getXCenter() { return 0; }
+   public double getYCenter() { return 0; }
+   public void setXCenter(double xCenter) {}
+   public void setYCenter(double yCenter) {}
+   public boolean isComplete() { return complete; }
+   public void setComplete(boolean complete) { this.complete = true; }
+   public ArrayList<Background> getBackgrounds() { return backgrounds; }
+   public ArrayList<DisplayableSprite> getSprites() { return sprites; }
+   public boolean centerOnPlayer() { return false; }
+   public void update(Animation animation, long actual_delta_time) {
+       boolean obDiedInInfinite = false;
+       for (int i = 0; i < sprites.size(); i++) {
+           DisplayableSprite sprite = sprites.get(i);
+           sprite.update(this, actual_delta_time);
+           if (infiniteMode && sprite instanceof ObSprite && sprite.getDispose()) {
+               obDiedInInfinite = true;
+           }
+          
+           if (sprite instanceof ObSprite) {
+               ObSprite ob = (ObSprite) sprite;
+               if (ob.getLevelComplete() && !infiniteMode) {
+                   nextLevel = true;
+                   ob.setDispose(true);
+               }
+               flappy = ob.getFlappyMode();
+               reversed = ob.getReversed();
+           }
+           if (sprite instanceof HomeSprite && ((HomeSprite) sprite).isClicked()) {
+               mainScreen = true;
+               infiniteMode = false;
+           }
+           if (sprite instanceof ObSprite && sprite.getDispose() && !infiniteMode) {
+               resetLevel = true;
+           }
+           if (sprite instanceof PlaySprite && ((PlaySprite) sprite).isClicked()) {
+               mainScreen = false;
+               if (!infiniteMode) resetLevel();
+           }
+           if (sprite instanceof InfiniteButton && ((InfiniteButton) sprite).isClicked()) {
+               startInfiniteMode();
+           }
+       }
+       if (resetLevel && !mainScreen && !infiniteMode) resetLevel();
+       if (nextLevel && !mainScreen && !infiniteMode) nextLevel();
+       if (mainScreen && !infiniteMode) mainScreen();
+      
+       KeyboardInput keyboard = KeyboardInput.getKeyboard();
+       if (infiniteMode && !obDiedInInfinite) {
+           spawnTimer += actual_delta_time;
+           // spawn based on distance
+           SpikeSprite lastSpike = null;
+           for (int i = infiniteSprites.size() - 1; i >= 0; i--) {
+               if (infiniteSprites.get(i) instanceof SpikeSprite) {
+                   lastSpike = (SpikeSprite) infiniteSprites.get(i);
+                   break;
+               }
+           }
+           if (lastSpike != null && lastSpike.getCenterX() - (-400) >= 600) {
+               spawnInfiniteObstacle();
+               spawnTimer = 0;
+           }
+       }
+       sprites.addAll(pendingSprites);
+       pendingSprites.clear();
+      
+       if (obDiedInInfinite) {
+           infiniteMode = false;
+           resetInfiniteMode();
+       }
+   }
+   protected void disposeSprites() {
+       for (DisplayableSprite sprite : sprites) {
+           if (sprite.getDispose()) disposalList.add(sprite);
+       }
+       for (DisplayableSprite sprite : disposalList) sprites.remove(sprite);
+       disposalList.clear();
+   }
+   public String toString() { return "ShellUniverse"; }
+   private boolean loadLevel(String path) {
+       ArrayList<DisplayableSprite> loadedSprites = new ArrayList<>();
+       boolean hasLevelEnd = false;
+       try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+           String line;
+           int lineNumber = 0;
+           while ((line = br.readLine()) != null) {
+               lineNumber++;
+               line = line.trim();
+               if (line.isEmpty() || line.startsWith("#")) continue;
+               String[] tokens = line.split("\\s+");
+               if (tokens[0].equals("Ob")) return false;
+               if (tokens[0].equals("ObSpeed")) { obSpeed = Double.parseDouble(tokens[1]); continue; }
+               if (tokens[0].equals("JetpackBattery")) { jetpackBattery = Double.parseDouble(tokens[1]); continue; }
+               if (tokens[0].equals("WallSpeed")) { wallSpeed = Double.parseDouble(tokens[1]); continue; }
+               DisplayableSprite sprite = parseSprite(tokens, lineNumber);
+               if (sprite == null) return false;
+               if (sprite instanceof LevelEndSprite) hasLevelEnd = true;
+               loadedSprites.add(sprite);
+           }
+       } catch (IOException e) { e.printStackTrace(); return false; }
+       if (!hasLevelEnd && !infiniteMode) return false;
+       sprites.clear();
+       sprites.addAll(loadedSprites);
+       sprites.add(new JetpackSprite(-400,0));
+       sprites.add(new ObSprite(-400,0));
+       sprites.add(new HomeSprite(-600, -300));
+       return true;
+   }
+   private DisplayableSprite parseSprite(String[] t, int lineNumber) {
+       try {
+           String type = t[0];
+           switch (type) {
+               case "Spike":
+                   if (t.length < 5 || t.length > 6) break;
+                   String imgPath = (t.length == 6 && !t[5].isEmpty()) ? t[5] : "res/red.jpg";
+                   return new SpikeSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]), Double.parseDouble(t[3]), Double.parseDouble(t[4]), imgPath);
+               case "Floor":
+                   if (t.length != 5) break;
+                   return new FloorSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]), Double.parseDouble(t[3]), Double.parseDouble(t[4]));
+               case "Wall":
+                   if (t.length != 3) break;
+                   return new WallSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]));
+               case "StatusRemover":
+                   if (t.length != 3) break;
+                   return new StatusRemoverSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]));
+               case "ReverseGravityPortal":
+                   if (t.length != 3) break;
+                   return new ReverseGravityPortalSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]));
+               case "LevelEnding":
+                   if (t.length != 5) break;
+                   return new LevelEndSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]), Double.parseDouble(t[3]), Double.parseDouble(t[4]));
+               case "FlappyBirdPortal":
+                   if (t.length != 5) break;
+                   return new FlappyBirdPortalSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]), Double.parseDouble(t[3]), Double.parseDouble(t[4]));
+           }
+       } catch (NumberFormatException e) { return null; }
+       return null;
+   }
+   private void resetLevel() {
+       resetLevel = false;
+       sprites.clear();
+       loadLevel(currentLevelPath);
+   }
+   private void nextLevel() {
+       nextLevel = false;
+       sprites.clear();
+       currentLevelIndex++;
+       if (currentLevelIndex >= levels.length) { complete = true; return; }
+       currentLevelPath = levels[currentLevelIndex];
+       if (!loadLevel(currentLevelPath)) throw new RuntimeException("Failed to load next level: " + currentLevelPath);
+   }
+   private void mainScreen() {
+       sprites.clear();
+       sprites.add(new PlaySprite(0,200));
+       sprites.add(new InfiniteButton(0, -200));
+   }
+   private void startInfiniteMode() {
+       infiniteMode = true;
+       mainScreen = false;
+       obSpeed = 600;
+       resetLevel = false;
+       nextLevel = false;
+       sprites.clear();
+       ObSprite ob = new ObSprite(-400, 0);
+       JetpackSprite jetpack = new JetpackSprite(-400, 0);
+       HomeSprite home = new HomeSprite(-600, -300);
+       sprites.add(jetpack);
+       sprites.add(ob);
+       sprites.add(home);
+       infiniteSprites.clear();
+       jetpackBattery = 1e10;
+       spawnTimer = 0;
+       // Spawn starter spike
+       SpikeSprite starterSpike = new SpikeSprite(1200, 0, 200, 200, "res/SpriteImages/SpikeImages/Box200x200.png");
+       sprites.add(starterSpike);
+       infiniteSprites.add(starterSpike);
+       lastSpawnX = starterSpike.getCenterX();
+   }
+   private void spawnInfiniteObstacle() {
+       Random rand = new Random();
+       int count = 1 + rand.nextInt(3);
+       for (int i = 0; i < count; i++) {
+           double x = lastSpawnX + 600 + i * 250;
+           double y = 0 + rand.nextDouble() * 400;
+           double width = 200;
+           double height = 200;
+           if (rand.nextInt(5) == 4) { // small chance at portal spawn
+               int portalType;
+               if (flappy || reversed) {
+                   portalType = rand.nextInt(3);
+               } else {
+                   portalType = rand.nextInt(2);
+               }
+               DisplayableSprite portal = null;
+               switch (portalType) {
+                   case 0:
+                       portal = new ReverseGravityPortalSprite(x, 0);
+                       break;
+                   case 1:
+                       portal = new FlappyBirdPortalSprite(x, 0, width, height);
+                       break;
+                   case 2:
+                       portal = new StatusRemoverSprite(x, 0);
+                       break;
+               }
+               pendingSprites.add(portal);
+               infiniteSprites.add(portal);
+           } else { // spawn spikes
+               String img = "res/SpriteImages/SpikeImages/Box200x200.png";
+               SpikeSprite spike = new SpikeSprite(x, y, width, height, img);
+               pendingSprites.add(spike);
+               infiniteSprites.add(spike);
+           }
+           lastSpawnX = x;
+       }
+   }
+   private void resetInfiniteMode() {
+       for (DisplayableSprite sprite : sprites) sprite.setDispose(true);
+       disposeSprites();
+       mainScreen = true;
+       infiniteMode = false;
+       spawnTimer = 0;
+       mainScreen();
+   }
 }

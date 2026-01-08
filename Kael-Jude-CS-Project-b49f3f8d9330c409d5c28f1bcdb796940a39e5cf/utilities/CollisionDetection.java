@@ -161,46 +161,47 @@ public class CollisionDetection {
 	}
 
 	public static boolean pixelBasedOverlaps(DisplayableSprite spriteA, DisplayableSprite spriteB, double deltaAX, double deltaAY) {
+	    if (!overlaps(spriteA, spriteB, deltaAX, deltaAY)) return false;
+	    
+	    BufferedImage bufferedA = (BufferedImage) spriteA.getImage();
+	    BufferedImage bufferedB = (BufferedImage) spriteB.getImage();
+	    if (bufferedA == null || bufferedB == null) return false;
+	    
+	    int offsetX = (int)(spriteB.getMinX() - (spriteA.getMinX() + deltaAX));
+	    int offsetY = (int)(spriteB.getMinY() - (spriteA.getMinY() + deltaAY));
+	    
+	    double scaleXA = bufferedA.getWidth() / spriteA.getWidth();
+	    double scaleYA = bufferedA.getHeight() / spriteA.getHeight();
+	    double scaleXB = bufferedB.getWidth() / spriteB.getWidth();
+	    double scaleYB = bufferedB.getHeight() / spriteB.getHeight();
+	    
+	    int left = 0;
+	    int top = 0;
+	    int right = (int)spriteA.getWidth();
+	    int bottom = (int)spriteA.getHeight();
 
-		if (overlaps(spriteA, spriteB, deltaAX, deltaAY) == false) {
-			return false;
-		}
-		
-		BufferedImage bufferedA = (BufferedImage) spriteA.getImage();
-		BufferedImage bufferedB = (BufferedImage) spriteB.getImage();
-		
-		int offsetX = (int) (spriteB.getMinX() - (spriteA.getMinX() + deltaAX));
-		int offsetY = (int) (spriteB.getMinY() - (spriteA.getMinY() + deltaAY));
-		
-		int left = Math.max(0, (int) (offsetX));
-		int top =  Math.max(0, (int) (offsetY));
-		int right = (int) (spriteA.getWidth() - Math.max(0, spriteA.getMaxX() + deltaAX - spriteB.getMaxX()));
-		int bottom = (int) (spriteA.getHeight() - Math.max(0, spriteA.getMaxY() + deltaAY - spriteB.getMaxY()));
-		
-		double scaleXA = bufferedA.getHeight() / (float)spriteA.getWidth();
-		double scaleYA = bufferedA.getHeight() / (float)spriteA.getHeight();
-		double scaleXB = bufferedB.getHeight() /  (float)spriteB.getWidth();
-		double scaleYB = bufferedB.getHeight() /  (float)spriteB.getHeight();
+	    for (int x = left; x < right; x++) {
+	        for (int y = top; y < bottom; y++) {
+	            int xA = (int)(x * scaleXA);
+	            int yA = (int)(y * scaleYA);
+	            int xB = (int)((x - offsetX) * scaleXB);
+	            int yB = (int)((y - offsetY) * scaleYB);
 
-		for (int x = left; x < right; x++) {
-			for (int y = top; y < bottom; y++) {
-				int xA = (int)(x * scaleXA);
-				int yA = (int)(y * scaleYA);				
-				int xB = (int) ((x - offsetX) * scaleXB);
-				int yB = (int) ((y - offsetY) * scaleYB);
-				if ((xB >= 0) && (yB >= 0) && (yB < bufferedB.getWidth()) && (yB < bufferedB.getHeight())) {
-					int pixelA = bufferedA.getRGB(xA, yA);
-					int pixelB = bufferedB.getRGB(xB, yB);
-					if ((pixelA>>>24 > 0x00) && (pixelB>>>24 > 0x00)) {
-						return true;
-					}
-				}
-			}
-		}	
-		
-		return false;
-				
+	            if (xA >= 0 && xA < bufferedA.getWidth() &&
+	                yA >= 0 && yA < bufferedA.getHeight() &&
+	                xB >= 0 && xB < bufferedB.getWidth() &&
+	                yB >= 0 && yB < bufferedB.getHeight()) {
+	                
+	                int pixelA = bufferedA.getRGB(xA, yA);
+	                int pixelB = bufferedB.getRGB(xB, yB);
+	                if ((pixelA>>>24 > 0) && (pixelB>>>24 > 0)) return true;
+	            }
+	        }
+	    }
+	    
+	    return false;
 	}
+
 	
 	public VirtualSprite calculate2DBounce(VirtualSprite bounce, DisplayableSprite sprite, ArrayList<DisplayableSprite> barriers, double velocityX, double velocityY, long actual_delta_time) {
 
