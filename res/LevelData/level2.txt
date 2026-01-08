@@ -24,7 +24,7 @@ Spike 3200 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
 Spike 3400 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
 Spike 3600 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
 
-Spike 3800 120 400 600 res/SpriteImages/SpikeImages/Box200x200.png 
+Spike 3900 120 200 400 res/SpriteImages/SpikeImages/Plant200x400.png 
 # gonna be a big plant
 
 Spike 4200 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
