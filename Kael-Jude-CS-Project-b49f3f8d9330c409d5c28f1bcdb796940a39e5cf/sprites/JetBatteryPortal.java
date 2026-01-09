@@ -18,7 +18,7 @@ public class JetBatteryPortal implements DisplayableSprite {
 	private boolean dispose;
 	private double obSpeed;
 	private double velocityX;
-
+	private boolean collide = false;
 	public JetBatteryPortal(double centerX, double centerY) {
 		this.centerX = centerX;
 		this.centerY = centerY;
@@ -93,6 +93,14 @@ public class JetBatteryPortal implements DisplayableSprite {
 	@Override
 	public void setDispose(boolean dispose) {
 		this.dispose = dispose;
+	}
+	
+	public void setCollide(boolean collide) {
+		this.collide = collide;
+	}
+	
+	public boolean getCollide() {
+		return collide;
 	}
 	
 	public void update(Universe universe, long actualDeltaTime) {
