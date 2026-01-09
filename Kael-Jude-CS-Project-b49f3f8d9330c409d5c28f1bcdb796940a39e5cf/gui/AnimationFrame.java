@@ -256,12 +256,33 @@ public class AnimationFrame extends JFrame {
 		dispose();	
 
 	}
+	
+
+
+
+	private JLabel lblAttempts; 
+	{
+	    lblAttempts = new JLabel("attempts: 0");
+	    lblAttempts.setForeground(Color.BLACK);
+	    lblAttempts.setFont(new Font("Consolas", Font.BOLD, 24));
+	    lblAttempts.setBounds(550, 50, 300, 40); 
+	    lblAttempts.setOpaque(false);
+
+	    SwingUtilities.invokeLater(() -> {
+	        getContentPane().setLayout(null); 
+	        getContentPane().add(lblAttempts);
+	        getContentPane().setComponentZOrder(lblAttempts, 0); 
+	    });
+	}
+
 
 	protected void updateControls() {
-		if (universe != null) {
-			this.lblBottom.setText("");
+		if (universe != null && lblAttempts != null) {
+		    lblAttempts.setText(((ShellUniverse) universe).getTextOnScreen());
 		}
+
 	}
+	
 
 	protected void btnPauseRun_mouseClicked(MouseEvent arg0) {
 		if (isPaused) {

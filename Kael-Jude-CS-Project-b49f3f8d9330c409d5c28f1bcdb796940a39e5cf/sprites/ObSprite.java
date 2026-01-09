@@ -231,7 +231,7 @@ public class ObSprite implements DisplayableSprite {
                  sprite.getMaxY() < getMinY() ||
                  sprite.getMinY() > getMaxY());
     }
-    
+
     private void removeStatusEffects() {
     	gravity = DEFAULT_GRAVITY;
     	currentImage = normalImage;

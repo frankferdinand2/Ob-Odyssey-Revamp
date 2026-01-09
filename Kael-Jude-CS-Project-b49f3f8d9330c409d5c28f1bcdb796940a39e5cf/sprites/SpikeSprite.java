@@ -33,8 +33,6 @@ public class SpikeSprite implements DisplayableSprite {
 		this.imagePath = imagePath;
 		loadImage(imagePath);
 	}
-
-
 	public String getImagePath() {
 		return imagePath;
 	}

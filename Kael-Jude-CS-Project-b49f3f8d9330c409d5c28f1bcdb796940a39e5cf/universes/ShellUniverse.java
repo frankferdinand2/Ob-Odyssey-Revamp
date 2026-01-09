@@ -21,9 +21,13 @@ public class ShellUniverse implements Universe {
    private boolean nextLevel = false;
    private boolean mainScreen = false;
    private boolean infiniteMode = false;
-   private long spawnTimer = 0;
    private boolean flappy;
    private boolean reversed;
+   private int lastPortal = 0;
+   private String textOnScreen = "";
+   private int attempts = 0;
+   private int distance = 0;
+   
    public ShellUniverse() {
        this.setXCenter(0);
        this.setYCenter(0);
@@ -32,43 +36,107 @@ public class ShellUniverse implements Universe {
            throw new RuntimeException("Level failed to load");
        }
    }
-   public double getObSpeed() { return obSpeed; }
-   public double getWallSpeed() { return wallSpeed; }
-   public double getJetpackBattery() { return jetpackBattery; }
-   public double getScale() { return 1; }
-   public double getXCenter() { return 0; }
-   public double getYCenter() { return 0; }
-   public void setXCenter(double xCenter) {}
-   public void setYCenter(double yCenter) {}
-   public boolean isComplete() { return complete; }
-   public void setComplete(boolean complete) { this.complete = true; }
-   public ArrayList<Background> getBackgrounds() { return backgrounds; }
-   public ArrayList<DisplayableSprite> getSprites() { return sprites; }
-   public boolean centerOnPlayer() { return false; }
+   
+   public void setTextOnScreen(String textOnScreen) {
+	   this.textOnScreen = textOnScreen;
+   }
+   
+   public double getObSpeed() { 
+	   return obSpeed; 
+   }
+   
+   public double getWallSpeed() { 
+	   return wallSpeed; 
+   }
+   
+   public double getJetpackBattery() { 
+	   return jetpackBattery; 
+   }
+   
+   public double getScale() { 
+	   return 1;
+   }
+   public double getXCenter() { 
+	   return 0; 
+   }
+   
+   public double getYCenter() { 
+	   return 0; 
+   }
+   
+   public void setXCenter(double xCenter) {
+	   
+   }
+   public void setYCenter(double yCenter) {
+	   
+   }
+   public boolean isComplete() { 
+	   return complete; 
+   }
+   
+   public void setComplete(boolean complete) { 
+	   this.complete = true; 
+   }
+   
+   public ArrayList<Background> getBackgrounds() { 
+	   return backgrounds; 
+   }
+   
+   public ArrayList<DisplayableSprite> getSprites() { 
+	   return sprites; 
+   }
+   
+   public boolean centerOnPlayer() { 
+	   return false; 
+   }
+   
    public void update(Animation animation, long actual_delta_time) {
+	   boolean changed = false;
        boolean obDiedInInfinite = false;
        for (int i = 0; i < sprites.size(); i++) {
            DisplayableSprite sprite = sprites.get(i);
            sprite.update(this, actual_delta_time);
            if (infiniteMode && sprite instanceof ObSprite && sprite.getDispose()) {
                obDiedInInfinite = true;
+               distance = 0;
            }
-          
+           
+           
+           if (sprite instanceof SpikeSprite) {
+        	   if (infiniteMode && !changed) {
+            	   distance += -0.1 * (int) (actual_delta_time * 0.001 * ((SpikeSprite) sprite).getVelocityX());
+            	   changed = true;
+               }
+           }
+           if (mainScreen) {
+        	   setTextOnScreen("");
+           }
+           if (infiniteMode) {
+        	   
+        	   setTextOnScreen("Lightyears: " + (int) (distance * 0.05));
+           }
            if (sprite instanceof ObSprite) {
                ObSprite ob = (ObSprite) sprite;
                if (ob.getLevelComplete() && !infiniteMode) {
                    nextLevel = true;
                    ob.setDispose(true);
                }
+               
                flappy = ob.getFlappyMode();
                reversed = ob.getReversed();
            }
            if (sprite instanceof HomeSprite && ((HomeSprite) sprite).isClicked()) {
                mainScreen = true;
                infiniteMode = false;
+               distance = 0; 
+               attempts = 0;
            }
+           
+           
            if (sprite instanceof ObSprite && sprite.getDispose() && !infiniteMode) {
+        	   attempts ++;
                resetLevel = true;
+               setTextOnScreen("attempts: " + attempts);
            }
            if (sprite instanceof PlaySprite && ((PlaySprite) sprite).isClicked()) {
                mainScreen = false;
@@ -77,14 +145,19 @@ public class ShellUniverse implements Universe {
            if (sprite instanceof InfiniteButton && ((InfiniteButton) sprite).isClicked()) {
                startInfiniteMode();
            }
+           
+           if (nextLevel) {
+        	   attempts = 0;
+        	   setTextOnScreen("attempts: 0");
+           }
        }
+       
        if (resetLevel && !mainScreen && !infiniteMode) resetLevel();
        if (nextLevel && !mainScreen && !infiniteMode) nextLevel();
        if (mainScreen && !infiniteMode) mainScreen();
       
        KeyboardInput keyboard = KeyboardInput.getKeyboard();
        if (infiniteMode && !obDiedInInfinite) {
-           spawnTimer += actual_delta_time;
            // spawn based on distance
            SpikeSprite lastSpike = null;
            for (int i = infiniteSprites.size() - 1; i >= 0; i--) {
@@ -95,11 +168,12 @@ public class ShellUniverse implements Universe {
            }
            if (lastSpike != null && lastSpike.getCenterX() - (-400) >= 600) {
                spawnInfiniteObstacle();
-               spawnTimer = 0;
            }
        }
        sprites.addAll(pendingSprites);
        pendingSprites.clear();
+       disposeSprites();
+
       
        if (obDiedInInfinite) {
            infiniteMode = false;
@@ -107,12 +181,15 @@ public class ShellUniverse implements Universe {
        }
    }
    protected void disposeSprites() {
-       for (DisplayableSprite sprite : sprites) {
-           if (sprite.getDispose()) disposalList.add(sprite);
-       }
-       for (DisplayableSprite sprite : disposalList) sprites.remove(sprite);
-       disposalList.clear();
-   }
+	    for (DisplayableSprite sprite : sprites) {
+	        if (sprite.getDispose()) {
+	            disposalList.add(sprite);
+	            infiniteSprites.remove(sprite); 
+	        }
+	    }
+	    sprites.removeAll(disposalList);
+	    disposalList.clear();
+	}
    public String toString() { return "ShellUniverse"; }
    private boolean loadLevel(String path) {
        ArrayList<DisplayableSprite> loadedSprites = new ArrayList<>();
@@ -206,8 +283,7 @@ public class ShellUniverse implements Universe {
        sprites.add(home);
        infiniteSprites.clear();
        jetpackBattery = 1e10;
-       spawnTimer = 0;
-       // Spawn starter spike
+       // Spawn starter spike to track ob speed (more importantly ob distance)
        SpikeSprite starterSpike = new SpikeSprite(1200, 0, 200, 200, "res/SpriteImages/SpikeImages/Box200x200.png");
        sprites.add(starterSpike);
        infiniteSprites.add(starterSpike);
@@ -226,16 +302,27 @@ public class ShellUniverse implements Universe {
            double height = 200;
            if (rand.nextInt(3) == 2) {
         	   String img = "res/SpriteImages/SpikeImages/Box200x200.png";
-        	   SpikeSprite spike = new SpikeSprite(x, y, width, height, img);
-        	   FloorSprite floor = new FloorSprite(x, y, width-50, height + 25);
+        	   SpikeSprite spike = new SpikeSprite(x+200, y, width, height, img);
+        	   SpikeSprite spikeB = new SpikeSprite(x-200, y, width, height, img);
+
+        	   FloorSprite floor = new FloorSprite(x, y, width, height + 5);
         	   pendingSprites.add(spike);
+        	   pendingSprites.add(spikeB);
         	   pendingSprites.add(floor);
         	   infiniteSprites.add(floor);
         	   infiniteSprites.add(spike);
+        	   infiniteSprites.add(spikeB);
                
-               
+               lastPortal++;
            }
-           else if (rand.nextInt(5) == 4) { // small chance at portal spawn
+           else if (rand.nextInt(6) == 2) {
+        	   String img = "res/SpriteImages/SpikeImages/Plant200x400.png";
+        	   SpikeSprite spike = new SpikeSprite(x, 140, 200, 400, img);
+        	   pendingSprites.add(spike);
+               infiniteSprites.add(spike);
+
+           }
+           else if (rand.nextInt(10) == 4 && lastPortal > 5) { // small chance at portal spawn
                DisplayableSprite portal = null;
                ArrayList<DisplayableSprite> possible = new ArrayList<>();
 
@@ -244,9 +331,10 @@ public class ShellUniverse implements Universe {
 
                if (!flappy)
                    possible.add(new FlappyBirdPortalSprite(x, 0, width, height));
-
-               possible.add(new StatusRemoverSprite(x, 0));
-
+               
+               if (flappy || reversed) {
+            	   possible.add(new StatusRemoverSprite(x, 0));
+               }
                portal = possible.get(rand.nextInt(possible.size()));
                if (rand.nextInt(2) == 0) {
             	   SpikeSprite spikeA = new SpikeSprite(x, 250, width, height, "res/SpriteImages/SpikeImages/Box200x200.png");
@@ -257,18 +345,25 @@ public class ShellUniverse implements Universe {
                    infiniteSprites.add(spikeB);
                }
                else {
-            	   SpikeSprite spikeA = new SpikeSprite(x, 250, width, height, "res/SpriteImages/SpikeImages/Box200x200.png");
-                   SpikeSprite spikeB = new SpikeSprite(x, -250, width, height, "res/SpriteImages/SpikeImages/Box200x200.png");
-                   FloorSprite floorA = new FloorSprite(x, 250, 150, 225);
-                   FloorSprite floorB = new FloorSprite(x, -250, 150, 225);
+            	   SpikeSprite spikeA = new SpikeSprite(x-200, 250, width, height, "res/SpriteImages/SpikeImages/Box200x200.png");
+                   SpikeSprite spikeB = new SpikeSprite(x+200, -250, width, height, "res/SpriteImages/SpikeImages/Box200x200.png");
+                   SpikeSprite spikeC = new SpikeSprite(x+200, 250, width, height, "res/SpriteImages/SpikeImages/Box200x200.png");
+                   SpikeSprite spikeD = new SpikeSprite(x-200, -250, width, height, "res/SpriteImages/SpikeImages/Box200x200.png");
+
+                   FloorSprite floorA = new FloorSprite(x, 250, 200, 205);
+                   FloorSprite floorB = new FloorSprite(x, -250, 200, 205);
                    pendingSprites.add(spikeA);
                    pendingSprites.add(spikeB);
+                   pendingSprites.add(spikeC);
+                   pendingSprites.add(spikeD);
                    pendingSprites.add(floorA);
                    pendingSprites.add(floorB);
                    infiniteSprites.add(floorA);
                    infiniteSprites.add(floorB);
                    infiniteSprites.add(spikeA);
                    infiniteSprites.add(spikeB);
+                   infiniteSprites.add(spikeC);
+                   infiniteSprites.add(spikeD);
                    
                }
                
@@ -281,16 +376,20 @@ public class ShellUniverse implements Universe {
                SpikeSprite spike = new SpikeSprite(x, y, width, height, img);
                pendingSprites.add(spike);
                infiniteSprites.add(spike);
+               lastPortal++;
            }
            lastSpawnX = x;
        }
+   }
+   
+   public String getTextOnScreen() {
+	   return textOnScreen;
    }
    private void resetInfiniteMode() {
        for (DisplayableSprite sprite : sprites) sprite.setDispose(true);
        disposeSprites();
        mainScreen = true;
        infiniteMode = false;
-       spawnTimer = 0;
        mainScreen();
    }
 }
