@@ -27,6 +27,8 @@ public class ShellUniverse implements Universe {
    private String textOnScreen = "";
    private int attempts = 0;
    private int distance = 0;
+   private int lightYears = 0;
+   private int highScoreInfinite = 0;
    
    public ShellUniverse() {
        this.setXCenter(0);
@@ -35,6 +37,8 @@ public class ShellUniverse implements Universe {
        if (!loadLevel(currentLevelPath)) {
            throw new RuntimeException("Level failed to load");
        }
+
+
    }
    
    public void setTextOnScreen(String textOnScreen) {
@@ -98,6 +102,9 @@ public class ShellUniverse implements Universe {
            sprite.update(this, actual_delta_time);
            if (infiniteMode && sprite instanceof ObSprite && sprite.getDispose()) {
                obDiedInInfinite = true;
+               if (lightYears > highScoreInfinite) {
+            	   highScoreInfinite = lightYears;
+               }
                distance = 0;
            }
            
@@ -112,8 +119,8 @@ public class ShellUniverse implements Universe {
         	   setTextOnScreen("");
            }
            if (infiniteMode) {
-        	   
-        	   setTextOnScreen("Lightyears: " + (int) (distance * 0.05));
+        	   lightYears = (int) (distance * 0.05);
+        	   setTextOnScreen("Lightyears: " + lightYears);
            }
            if (sprite instanceof ObSprite) {
                ObSprite ob = (ObSprite) sprite;
@@ -148,7 +155,7 @@ public class ShellUniverse implements Universe {
            
            if (nextLevel) {
         	   attempts = 0;
-        	   setTextOnScreen("attempts: 0");
+        	   
            }
        }
        
@@ -300,7 +307,7 @@ public class ShellUniverse implements Universe {
            }
            double width = 200;
            double height = 200;
-           if (rand.nextInt(3) == 2) {
+           if (rand.nextInt(10) == 2) {
         	   String img = "res/SpriteImages/SpikeImages/Box200x200.png";
         	   SpikeSprite spike = new SpikeSprite(x+200, y, width, height, img);
         	   SpikeSprite spikeB = new SpikeSprite(x-200, y, width, height, img);
@@ -320,11 +327,28 @@ public class ShellUniverse implements Universe {
         	   SpikeSprite spike = new SpikeSprite(x, 140, 200, 400, img);
         	   pendingSprites.add(spike);
                infiniteSprites.add(spike);
+               lastPortal++;
 
            }
-           else if (rand.nextInt(10) == 4 && lastPortal > 5) { // small chance at portal spawn
+           else if (rand.nextInt(9) == 1) {
+        	   SpikeSprite spikeA = new SpikeSprite(x, -260, 200, 200, "res/SpriteImages/SpikeImages/Box200x200.png");
+        	   SpikeSprite spikeB = new SpikeSprite(x - 200, 270, 100, 100, "res/SpriteImages/SpikeImages/Box100x100.png");
+        	   SpikeSprite spikeC = new SpikeSprite(x-50, 220, 200, 200, "res/SpriteImages/SpikeImages/Box200x200.png");
+        	   SpikeSprite spikeD = new SpikeSprite(x, 70, 100, 100, "res/SpriteImages/SpikeImages/Box100x100.png");
+        	   pendingSprites.add(spikeA);
+        	   pendingSprites.add(spikeB);
+        	   pendingSprites.add(spikeC);
+        	   pendingSprites.add(spikeD);
+        	   infiniteSprites.add(spikeA);
+        	   infiniteSprites.add(spikeB);
+        	   infiniteSprites.add(spikeC);
+        	   infiniteSprites.add(spikeD);
+        	   lastPortal++;
+           }
+           else if (rand.nextInt(10) == 4 && lastPortal > 15) { // small chance at portal spawn
                DisplayableSprite portal = null;
                ArrayList<DisplayableSprite> possible = new ArrayList<>();
+               x += 250;
 
                if (!reversed)
                    possible.add(new ReverseGravityPortalSprite(x, 0));
@@ -370,7 +394,8 @@ public class ShellUniverse implements Universe {
                pendingSprites.add(portal);
 
                infiniteSprites.add(portal);
-               ;
+               lastPortal = 0;
+               
            } else { // spawn spikes
                String img = "res/SpriteImages/SpikeImages/Box200x200.png";
                SpikeSprite spike = new SpikeSprite(x, y, width, height, img);
