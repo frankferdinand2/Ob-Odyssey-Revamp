@@ -29,6 +29,7 @@ public class ShellUniverse implements Universe {
    private int distance = 0;
    private int lightYears = 0;
    private int highScoreInfinite = 0;
+   private int lastCharge = 0;
    
    public ShellUniverse() {
        this.setXCenter(0);
@@ -289,7 +290,7 @@ public class ShellUniverse implements Universe {
        sprites.add(ob);
        sprites.add(home);
        infiniteSprites.clear();
-       jetpackBattery = 1e10;
+       jetpackBattery = 10;
        // Spawn starter spike to track ob speed (more importantly ob distance)
        SpikeSprite starterSpike = new SpikeSprite(1200, 0, 200, 200, "res/SpriteImages/SpikeImages/Box200x200.png");
        sprites.add(starterSpike);
@@ -307,7 +308,15 @@ public class ShellUniverse implements Universe {
            }
            double width = 200;
            double height = 200;
-           if (rand.nextInt(10) == 2) {
+           if ((lastCharge == 10 && lightYears < 100) || (lastCharge == 20 && lightYears < 500)) {
+        	   lastCharge = 0;
+        	   JetBatteryPortal chargeStation = new JetBatteryPortal(x,y);
+        	   pendingSprites.add(chargeStation);
+        	   infiniteSprites.add(chargeStation);
+        	   lastPortal++;
+        	   
+           }
+           else if (rand.nextInt(10) == 2) {
         	   String img = "res/SpriteImages/SpikeImages/Box200x200.png";
         	   SpikeSprite spike = new SpikeSprite(x+200, y, width, height, img);
         	   SpikeSprite spikeB = new SpikeSprite(x-200, y, width, height, img);
@@ -321,6 +330,7 @@ public class ShellUniverse implements Universe {
         	   infiniteSprites.add(spikeB);
                
                lastPortal++;
+               lastCharge++;
            }
            else if (rand.nextInt(6) == 2) {
         	   String img = "res/SpriteImages/SpikeImages/Plant200x400.png";
@@ -328,6 +338,7 @@ public class ShellUniverse implements Universe {
         	   pendingSprites.add(spike);
                infiniteSprites.add(spike);
                lastPortal++;
+               lastCharge++;
 
            }
            else if (rand.nextInt(9) == 1) {
@@ -344,6 +355,7 @@ public class ShellUniverse implements Universe {
         	   infiniteSprites.add(spikeC);
         	   infiniteSprites.add(spikeD);
         	   lastPortal++;
+        	   lastCharge++;
            }
            else if (rand.nextInt(10) == 4 && lastPortal > 15) { // small chance at portal spawn
                DisplayableSprite portal = null;
@@ -395,6 +407,7 @@ public class ShellUniverse implements Universe {
 
                infiniteSprites.add(portal);
                lastPortal = 0;
+               lastCharge++;
                
            } else { // spawn spikes
                String img = "res/SpriteImages/SpikeImages/Box200x200.png";
@@ -402,6 +415,7 @@ public class ShellUniverse implements Universe {
                pendingSprites.add(spike);
                infiniteSprites.add(spike);
                lastPortal++;
+               lastCharge++;
            }
            lastSpawnX = x;
        }

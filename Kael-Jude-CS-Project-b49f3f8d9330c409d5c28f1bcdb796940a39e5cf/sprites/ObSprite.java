@@ -188,7 +188,9 @@ public class ObSprite implements DisplayableSprite {
                 currentImage = ImageRotator.rotate(normalImage, 270);
                 
             }
-
+            if (sprite instanceof JetBatteryPortal && checkCollision(sprite)) {
+            	jetBattery += 10;
+            }
             if (sprite instanceof FloorSprite && checkCollision(sprite)) {
                 if (velocityY > 0) { // floor possibility
                     centerY = sprite.getMinY() - height / 2;
