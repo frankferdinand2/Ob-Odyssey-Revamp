@@ -275,101 +275,8 @@ public class AnimationFrame extends JFrame {
 	    });
 	}
 
-	private JButton btnCharacter;
-	{
-	    btnCharacter = new JButton(new ImageIcon("res/SpriteImages/ObSprite.png")); 
-	    btnCharacter.setBounds(50, 360, 85, 85);
-	    btnCharacter.setBorderPainted(false);
-	    btnCharacter.setContentAreaFilled(false);
-	    btnCharacter.setFocusPainted(false);
-	    btnCharacter.setOpaque(false);
-	    btnCharacter.setDoubleBuffered(true);
-	    btnCharacter.setVisible(false); 
 
-	    btnCharacter.addActionListener(e -> {
-	        if (universe != null) {
-	            ((ShellUniverse) universe).setCharacterSelection(true); 
-	            btnCharacter.setVisible(false); 
-	        }
-	    });
-
-	    SwingUtilities.invokeLater(() -> {
-	        getContentPane().setLayout(null); 
-	        getContentPane().add(btnCharacter);
-	        getContentPane().setComponentZOrder(btnCharacter, 0); 
-	    });
-	}
-
-	private JButton[] characterButtons = new JButton[6];
-	private String[] characterImagePaths = {
-	    "res/SpriteImages/ObSprite.png",
-	    "res/SpriteImages/AngryAuraObSprite.png",
-	    "res/SpriteImages/AngryObSprite.png",
-	    "res/SpriteImages/AurafulObSprite.png",
-	    "res/SpriteImages/ColdObSprite.png",
-	    "res/SpriteImages/PlasticSurgeryObSprite.png"
-	};
-
-	private ImageIcon[] characterIcons = new ImageIcon[6];
-
-	{
-	    for (int i = 0; i < characterImagePaths.length; i++) {
-	        characterIcons[i] = new ImageIcon(characterImagePaths[i]);
-	    }
-	}
-
-	{
-	    int cols = 3;
-	    int btnWidth = 85;
-	    int btnHeight = 85;
-	    int hSpacing = 50;
-	    int vSpacing = 50;
-
-	    int startX = 440;
-	    int startY = 260;
-
-	    for (int i = 0; i < 6; i++) {
-	        final int index = i;
-	        int row = i / cols;
-	        int col = i % cols;
-	        int x = startX + col * (btnWidth + hSpacing);
-	        int y = startY + row * (btnHeight + vSpacing);
-
-	        characterButtons[index] = new JButton(characterIcons[index]);
-	        characterButtons[index].setBounds(x, y, btnWidth, btnHeight);
-	        characterButtons[index].setBorderPainted(false);
-	        characterButtons[index].setContentAreaFilled(false);
-	        characterButtons[index].setFocusPainted(false);
-	        characterButtons[index].setOpaque(false);
-	        characterButtons[index].setDoubleBuffered(true);
-	        characterButtons[index].setVisible(false);
-
-	        characterButtons[index].addActionListener(e -> {
-	            if (universe != null) {
-	                ShellUniverse shell = (ShellUniverse) universe;
-	                shell.setCharacterSelection(false); 
-	                shell.setObImagePath(characterImagePaths[index]);
-	                btnCharacter.setIcon(characterIcons[index]);
-	                shell.setMainScreen(true);
-
-	                SwingUtilities.invokeLater(() -> {
-	                    for (JButton btn : characterButtons) {
-	                        btn.setVisible(false);
-	                    }
-	                });
-	            }
-	        });
-
-	        final JButton btn = characterButtons[index];
-	        SwingUtilities.invokeLater(() -> {
-	            getContentPane().add(btn);
-	            getContentPane().setComponentZOrder(btn, 0);
-	        });
-	    }
-	}
-
-	private boolean lastCharacterSelectionState = false;
-
+	
 	protected void updateControls() {
 	    if (universe != null && lblAttempts != null) {
 	        ShellUniverse shell = (ShellUniverse) universe;
@@ -378,23 +285,11 @@ public class AnimationFrame extends JFrame {
 
 	        if (shell.getMainScreen()) {
 	            gameTitle.setText("Ob's Odyssey");
-	            btnCharacter.setVisible(true);
 	        } else {
 	            gameTitle.setText("");
-	            btnCharacter.setVisible(false);
 	        }
 
-	        boolean show = shell.getCharacterSelection();
-
-	        if (show != lastCharacterSelectionState) {
-	            lastCharacterSelectionState = show;
-
-	            SwingUtilities.invokeLater(() -> {
-	                for (JButton btn : characterButtons) {
-	                    btn.setVisible(show);
-	                }
-	            });
-	        }
+	        
 	    }
 	}
 

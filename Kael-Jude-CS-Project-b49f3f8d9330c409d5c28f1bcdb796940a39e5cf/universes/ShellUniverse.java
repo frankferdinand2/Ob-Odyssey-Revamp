@@ -33,7 +33,8 @@ public class ShellUniverse implements Universe {
    private int lastCharge = 0;
    private final Random rand = new Random();
    private int infiniteTimer = 0;
-   private String obImagePath;
+   private String obImagePath = "res/SpriteImages/ObSprite.png";
+   private boolean spawned = false;
    
    
    public ShellUniverse() {
@@ -48,8 +49,10 @@ public class ShellUniverse implements Universe {
    }
    
    public void setObImagePath(String obImagePath) {
-	   this.obImagePath = obImagePath;
-   }
+	    if (obImagePath != null) {
+	        this.obImagePath = obImagePath;
+	    }
+	}
    
    public String getObImagePath() {
 	   return obImagePath;
@@ -129,12 +132,7 @@ public class ShellUniverse implements Universe {
                distance = 0;
            }
            
-           if (characterSelection) {
-        	   nextLevel = false;
-        	   mainScreen = false;
-        	   infiniteMode = false;
-        	   sprites.clear();
-           }
+           
            if (infiniteMode && sprite.getCenterX() < -1500) {
                sprite.setDispose(true);
            }
@@ -183,17 +181,32 @@ public class ShellUniverse implements Universe {
                startInfiniteMode();
            }
            
+           if (sprite instanceof CharacterSelectionInitiate && ((CharacterSelectionInitiate) sprite).isClicked()) {
+        	   characterSelection = true;
+        	   mainScreen = false;
+        	   spawned = false;
+           }
           
-           
+           if (sprite instanceof CharacterToSelect && ((CharacterToSelect) sprite).isClicked()) {
+        	   obImagePath = ((CharacterToSelect) sprite).getImagePath();
+        	   characterSelection = false;
+        	   mainScreen = true;
+           }
            if (nextLevel) {
         	   attempts = 0;
         	   
            }
+           
        }
        
        if (resetLevel && !mainScreen && !infiniteMode) resetLevel();
        if (nextLevel && !mainScreen && !infiniteMode) nextLevel();
        if (mainScreen && !infiniteMode) mainScreen();
+       if (characterSelection && !spawned) {
+    	   characterSelection();
+    	   spawned = true;
+       }
+       
       
 
     if (infiniteMode) {
@@ -203,7 +216,7 @@ public class ShellUniverse implements Universe {
             infiniteTimer = 0;
         }
     }
-
+    
        
        sprites.addAll(pendingSprites);
        pendingSprites.clear();
@@ -302,6 +315,8 @@ public class ShellUniverse implements Universe {
        sprites.clear();
        sprites.add(new PlaySprite(0,200));
        sprites.add(new InfiniteButton(0, -200));
+       sprites.add(new CharacterSelectionInitiate(-400, 200));
+       spawned = true;
    }
    private void startInfiniteMode() {
        infiniteMode = true;
@@ -466,11 +481,22 @@ public class ShellUniverse implements Universe {
        }
    }
    public boolean getMainScreen() {
+	   
 	   return mainScreen;
    }
    
    public void setMainScreen(boolean mainScreen) {
 	   this.mainScreen = mainScreen;
+   }
+   
+   public void characterSelection() {
+	   sprites.clear();
+	   sprites.add(new CharacterToSelect(-100, 55, "res/SpriteImages/ObSprite.png"));
+	   sprites.add(new CharacterToSelect(-100, -55, "res/SpriteImages/AngryObSprite.png"));
+	   sprites.add(new CharacterToSelect(0, 55, "res/SpriteImages/AngryAuraObSprite.png"));
+	   sprites.add(new CharacterToSelect(0, -55, "res/SpriteImages/AurafulObSprite.png"));
+	   sprites.add(new CharacterToSelect(100, 55, "res/SpriteImages/ColdObSprite.png"));
+	   sprites.add(new CharacterToSelect(100, -55, "res/SpriteImages/PlasticSurgeryObSprite.png"));
    }
    
    public String getTextOnScreen() {
