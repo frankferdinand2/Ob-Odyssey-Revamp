@@ -127,19 +127,7 @@ public class AnimationFrame extends JFrame {
 		panel.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		getContentPane().add(panel, BorderLayout.CENTER);
 
-		btnPauseRun = new JButton("||");
-		btnPauseRun.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				btnPauseRun_mouseClicked(arg0);
-			}
-		});
-
-		btnPauseRun.setFont(new Font("Tahoma", Font.BOLD, 12));
-		btnPauseRun.setBounds(SCREEN_WIDTH - 64, 20, 48, 32);
-		btnPauseRun.setFocusable(false);
-		getContentPane().add(btnPauseRun);
-		getContentPane().setComponentZOrder(btnPauseRun, 0);
+		
 
 		lblTop = new JLabel(""); 
 		lblTop.setForeground(Color.BLACK);
@@ -256,15 +244,12 @@ public class AnimationFrame extends JFrame {
 		dispose();	
 
 	}
-	
-
-
 
 	private JLabel lblAttempts; 
 	{
 	    lblAttempts = new JLabel("attempts: 0");
 	    lblAttempts.setForeground(Color.BLACK);
-	    lblAttempts.setFont(new Font("Consolas", Font.BOLD, 24));
+	    lblAttempts.setFont(new Font("Gotham", Font.PLAIN, 24));
 	    lblAttempts.setBounds(550, 50, 300, 40); 
 	    lblAttempts.setOpaque(false);
 
@@ -275,24 +260,142 @@ public class AnimationFrame extends JFrame {
 	    });
 	}
 
+	private JLabel gameTitle; 
+	{
+	    gameTitle = new JLabel("Ob's Odyssey");
+	    gameTitle.setForeground(Color.BLACK);
+	    gameTitle.setFont(new Font("DK Early Morning Coffee", Font.BOLD, 120));
+	    gameTitle.setBounds(330, 300, 1300, 200); 
+	    gameTitle.setOpaque(false);
+
+	    SwingUtilities.invokeLater(() -> {
+	        getContentPane().setLayout(null); 
+	        getContentPane().add(gameTitle);
+	        getContentPane().setComponentZOrder(gameTitle, 0); 
+	    });
+	}
+
+	private JButton btnCharacter;
+	{
+	    btnCharacter = new JButton(new ImageIcon("res/SpriteImages/ObSprite.png")); 
+	    btnCharacter.setBounds(50, 360, 85, 85);
+	    btnCharacter.setBorderPainted(false);
+	    btnCharacter.setContentAreaFilled(false);
+	    btnCharacter.setFocusPainted(false);
+	    btnCharacter.setOpaque(false);
+	    btnCharacter.setDoubleBuffered(true);
+	    btnCharacter.setVisible(false); 
+
+	    btnCharacter.addActionListener(e -> {
+	        if (universe != null) {
+	            ((ShellUniverse) universe).setCharacterSelection(true); 
+	            btnCharacter.setVisible(false); 
+	        }
+	    });
+
+	    SwingUtilities.invokeLater(() -> {
+	        getContentPane().setLayout(null); 
+	        getContentPane().add(btnCharacter);
+	        getContentPane().setComponentZOrder(btnCharacter, 0); 
+	    });
+	}
+
+	private JButton[] characterButtons = new JButton[6];
+	private String[] characterImagePaths = {
+	    "res/SpriteImages/ObSprite.png",
+	    "res/SpriteImages/AngryAuraObSprite.png",
+	    "res/SpriteImages/AngryObSprite.png",
+	    "res/SpriteImages/AurafulObSprite.png",
+	    "res/SpriteImages/ColdObSprite.png",
+	    "res/SpriteImages/PlasticSurgeryObSprite.png"
+	};
+
+	private ImageIcon[] characterIcons = new ImageIcon[6];
+
+	{
+	    for (int i = 0; i < characterImagePaths.length; i++) {
+	        characterIcons[i] = new ImageIcon(characterImagePaths[i]);
+	    }
+	}
+
+	{
+	    int cols = 3;
+	    int btnWidth = 85;
+	    int btnHeight = 85;
+	    int hSpacing = 50;
+	    int vSpacing = 50;
+
+	    int startX = 440;
+	    int startY = 260;
+
+	    for (int i = 0; i < 6; i++) {
+	        final int index = i;
+	        int row = i / cols;
+	        int col = i % cols;
+	        int x = startX + col * (btnWidth + hSpacing);
+	        int y = startY + row * (btnHeight + vSpacing);
+
+	        characterButtons[index] = new JButton(characterIcons[index]);
+	        characterButtons[index].setBounds(x, y, btnWidth, btnHeight);
+	        characterButtons[index].setBorderPainted(false);
+	        characterButtons[index].setContentAreaFilled(false);
+	        characterButtons[index].setFocusPainted(false);
+	        characterButtons[index].setOpaque(false);
+	        characterButtons[index].setDoubleBuffered(true);
+	        characterButtons[index].setVisible(false);
+
+	        characterButtons[index].addActionListener(e -> {
+	            if (universe != null) {
+	                ShellUniverse shell = (ShellUniverse) universe;
+	                shell.setCharacterSelection(false); 
+	                shell.setObImagePath(characterImagePaths[index]);
+	                btnCharacter.setIcon(characterIcons[index]);
+	                shell.setMainScreen(true);
+
+	                SwingUtilities.invokeLater(() -> {
+	                    for (JButton btn : characterButtons) {
+	                        btn.setVisible(false);
+	                    }
+	                });
+	            }
+	        });
+
+	        final JButton btn = characterButtons[index];
+	        SwingUtilities.invokeLater(() -> {
+	            getContentPane().add(btn);
+	            getContentPane().setComponentZOrder(btn, 0);
+	        });
+	    }
+	}
+
+	private boolean lastCharacterSelectionState = false;
 
 	protected void updateControls() {
-		if (universe != null && lblAttempts != null) {
-		    lblAttempts.setText(((ShellUniverse) universe).getTextOnScreen());
-		}
+	    if (universe != null && lblAttempts != null) {
+	        ShellUniverse shell = (ShellUniverse) universe;
 
-	}
-	
+	        lblAttempts.setText(shell.getTextOnScreen());
 
-	protected void btnPauseRun_mouseClicked(MouseEvent arg0) {
-		if (isPaused) {
-			isPaused = false;
-			this.btnPauseRun.setText("||");
-		}
-		else {
-			isPaused = true;
-			this.btnPauseRun.setText(">");
-		}
+	        if (shell.getMainScreen()) {
+	            gameTitle.setText("Ob's Odyssey");
+	            btnCharacter.setVisible(true);
+	        } else {
+	            gameTitle.setText("");
+	            btnCharacter.setVisible(false);
+	        }
+
+	        boolean show = shell.getCharacterSelection();
+
+	        if (show != lastCharacterSelectionState) {
+	            lastCharacterSelectionState = show;
+
+	            SwingUtilities.invokeLater(() -> {
+	                for (JButton btn : characterButtons) {
+	                    btn.setVisible(show);
+	                }
+	            });
+	        }
+	    }
 	}
 
 	private void handleKeyboardInput() {

@@ -138,10 +138,25 @@ public class ObSprite implements DisplayableSprite {
     public void update(Universe universe, long actualDeltaTime) {
         double deltaTime = actualDeltaTime * 0.001;
 		ShellUniverse u = (ShellUniverse) universe;
-
+		
         if (!found) {
         	jetBattery = u.getJetpackBattery();
         	found = true;
+        }
+        
+        String shellPath = u.getObImagePath(); 
+        if (shellPath != null && !shellPath.equals(IMAGE_PATH)) { 
+            try {
+                Image newImage = ImageIO.read(new File(shellPath));
+                if (newImage != null) {
+                    currentImage = newImage;
+                }
+            } catch (IOException e) {
+                System.err.println("Error loading shell image: " + e);
+                currentImage = normalImage;
+            }
+        } else {
+            currentImage = normalImage;
         }
 		
         KeyboardInput keyboard = KeyboardInput.getKeyboard();
@@ -189,7 +204,7 @@ public class ObSprite implements DisplayableSprite {
                 
             }
             if (sprite instanceof JetBatteryPortal && checkCollision(sprite) && !((JetBatteryPortal) sprite).getCollide()) {
-            	jetBattery += 10;
+            	jetBattery = 5;
             	((JetBatteryPortal) sprite).setCollide(true);
             }
             if (sprite instanceof FloorSprite && checkCollision(sprite)) {

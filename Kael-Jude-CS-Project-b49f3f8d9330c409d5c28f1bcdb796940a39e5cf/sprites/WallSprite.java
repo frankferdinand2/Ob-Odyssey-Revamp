@@ -119,11 +119,13 @@ public class WallSprite implements DisplayableSprite {
         if (keyboard.keyDown(39)) { // ob moves right objects move left
         	velocityX -= obSpeed * deltaTime;
             centerX += velocityX * deltaTime;
+            wallStart = true;
         }
         
         else if (keyboard.keyDown(37)) {
         	velocityX += obSpeed * deltaTime;
             centerX += velocityX * deltaTime;
+            wallStart = true;
         }
         
         else  if (velocityX > 0) { // and vice versa 

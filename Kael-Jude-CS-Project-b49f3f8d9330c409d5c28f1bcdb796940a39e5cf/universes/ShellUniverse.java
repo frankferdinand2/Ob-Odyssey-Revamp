@@ -21,6 +21,7 @@ public class ShellUniverse implements Universe {
    private boolean nextLevel = false;
    private boolean mainScreen = false;
    private boolean infiniteMode = false;
+   private boolean characterSelection = false;
    private boolean flappy;
    private boolean reversed;
    private int lastPortal = 0;
@@ -30,6 +31,10 @@ public class ShellUniverse implements Universe {
    private int lightYears = 0;
    private int highScoreInfinite = 0;
    private int lastCharge = 0;
+   private final Random rand = new Random();
+   private int infiniteTimer = 0;
+   private String obImagePath;
+   
    
    public ShellUniverse() {
        this.setXCenter(0);
@@ -40,6 +45,21 @@ public class ShellUniverse implements Universe {
        }
 
 
+   }
+   
+   public void setObImagePath(String obImagePath) {
+	   this.obImagePath = obImagePath;
+   }
+   
+   public String getObImagePath() {
+	   return obImagePath;
+   }
+   public void setCharacterSelection(boolean characterSelection) {
+	   this.characterSelection = characterSelection;
+   }
+   
+   public boolean getCharacterSelection() {
+	   return characterSelection;
    }
    
    public void setTextOnScreen(String textOnScreen) {
@@ -109,10 +129,19 @@ public class ShellUniverse implements Universe {
                distance = 0;
            }
            
+           if (characterSelection) {
+        	   nextLevel = false;
+        	   mainScreen = false;
+        	   infiniteMode = false;
+        	   sprites.clear();
+           }
+           if (infiniteMode && sprite.getCenterX() < -1500) {
+               sprite.setDispose(true);
+           }
            
            if (sprite instanceof SpikeSprite) {
         	   if (infiniteMode && !changed) {
-            	   distance += -0.1 * (int) (actual_delta_time * 0.001 * ((SpikeSprite) sprite).getVelocityX());
+            	   distance += -1 * (int) (actual_delta_time * 0.001 * ((SpikeSprite) sprite).getVelocityX());
             	   changed = true;
                }
            }
@@ -120,7 +149,7 @@ public class ShellUniverse implements Universe {
         	   setTextOnScreen("");
            }
            if (infiniteMode) {
-        	   lightYears = (int) (distance * 0.05);
+        	   lightYears = (int) (distance * 0.005);
         	   setTextOnScreen("Lightyears: " + lightYears);
            }
            if (sprite instanceof ObSprite) {
@@ -150,9 +179,11 @@ public class ShellUniverse implements Universe {
                mainScreen = false;
                if (!infiniteMode) resetLevel();
            }
-           if (sprite instanceof InfiniteButton && ((InfiniteButton) sprite).isClicked()) {
+           if (sprite instanceof InfiniteButton && ((InfiniteButton) sprite).isClicked() && !infiniteMode) {
                startInfiniteMode();
            }
+           
+          
            
            if (nextLevel) {
         	   attempts = 0;
@@ -164,20 +195,16 @@ public class ShellUniverse implements Universe {
        if (nextLevel && !mainScreen && !infiniteMode) nextLevel();
        if (mainScreen && !infiniteMode) mainScreen();
       
-       KeyboardInput keyboard = KeyboardInput.getKeyboard();
-       if (infiniteMode && !obDiedInInfinite) {
-           // spawn based on distance
-           SpikeSprite lastSpike = null;
-           for (int i = infiniteSprites.size() - 1; i >= 0; i--) {
-               if (infiniteSprites.get(i) instanceof SpikeSprite) {
-                   lastSpike = (SpikeSprite) infiniteSprites.get(i);
-                   break;
-               }
-           }
-           if (lastSpike != null && lastSpike.getCenterX() - (-400) >= 600) {
-               spawnInfiniteObstacle();
-           }
-       }
+
+    if (infiniteMode) {
+        infiniteTimer += actual_delta_time;
+        if (infiniteTimer > 500) { 
+            spawnInfiniteObstacle();
+            infiniteTimer = 0;
+        }
+    }
+
+       
        sprites.addAll(pendingSprites);
        pendingSprites.clear();
        disposeSprites();
@@ -280,6 +307,7 @@ public class ShellUniverse implements Universe {
        infiniteMode = true;
        mainScreen = false;
        obSpeed = 600;
+       wallSpeed = 500;
        resetLevel = false;
        nextLevel = false;
        sprites.clear();
@@ -289,8 +317,9 @@ public class ShellUniverse implements Universe {
        sprites.add(jetpack);
        sprites.add(ob);
        sprites.add(home);
+       sprites.add(new WallSprite(-1000, 0));
        infiniteSprites.clear();
-       jetpackBattery = 10;
+       jetpackBattery = 5;
        // Spawn starter spike to track ob speed (more importantly ob distance)
        SpikeSprite starterSpike = new SpikeSprite(1200, 0, 200, 200, "res/SpriteImages/SpikeImages/Box200x200.png");
        sprites.add(starterSpike);
@@ -298,16 +327,32 @@ public class ShellUniverse implements Universe {
        lastSpawnX = starterSpike.getCenterX();
    }
    private void spawnInfiniteObstacle() {
-       Random rand = new Random();
-       int count = 1 + rand.nextInt(3);
-       for (int i = 0; i < count; i++) {
-           double x = lastSpawnX + 600 + i * 250;
-           double y = 0 + rand.nextDouble() * 400;
-           if (rand.nextInt(2) == 0) {
-        	   y = y * -1;
-           }
-           double width = 200;
-           double height = 200;
+
+	   	int count = 1 + rand.nextInt(3);
+	   	
+	    int minSpacing = 600; 
+	    if (lightYears >= 100 && lightYears < 1000) { 
+	    	minSpacing = 550;
+	    }
+	    else if (lightYears >= 1000 && lightYears < 2500) {
+	    	minSpacing = 500;
+	    }
+	    else if (lightYears >= 2500 && lightYears < 5000) {
+	    	minSpacing = 250;
+	    }
+	    else if (lightYears > 5000 && lightYears < 10000) {
+	    	minSpacing = 100;
+	    }
+
+	    for (int i = 0; i < count; i++) {
+	        double x = lastSpawnX + minSpacing;
+	        lastSpawnX = x;
+	        double y = 0 + rand.nextDouble() * 400;
+	        if (rand.nextInt(2) == 0) {
+	            y = y * -1;
+	        }
+	        double width = 200;
+	        double height = 200;
            if ((lastCharge == 10 && lightYears < 100) || (lastCharge == 20 && lightYears < 500)) {
         	   lastCharge = 0;
         	   JetBatteryPortal chargeStation = new JetBatteryPortal(x,y);
@@ -419,6 +464,13 @@ public class ShellUniverse implements Universe {
            }
            lastSpawnX = x;
        }
+   }
+   public boolean getMainScreen() {
+	   return mainScreen;
+   }
+   
+   public void setMainScreen(boolean mainScreen) {
+	   this.mainScreen = mainScreen;
    }
    
    public String getTextOnScreen() {
