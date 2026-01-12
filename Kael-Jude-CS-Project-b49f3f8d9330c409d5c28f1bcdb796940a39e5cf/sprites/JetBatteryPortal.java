@@ -111,7 +111,8 @@ public class JetBatteryPortal implements DisplayableSprite {
 	    
 		
 	    KeyboardInput keyboard = KeyboardInput.getKeyboard();
-
+	    
+	    
 
 
         if (keyboard.keyDown(39)) { // ob moves right objects move left

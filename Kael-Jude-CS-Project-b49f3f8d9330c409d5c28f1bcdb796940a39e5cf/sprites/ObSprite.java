@@ -22,7 +22,7 @@ public class ObSprite implements DisplayableSprite {
 
     private static Image normalImage;
 
-    private Image baseImage;      // ✅ NEW (unrotated)
+    private Image baseImage;    
     private Image currentImage;
 
     private double gravity;
@@ -55,7 +55,7 @@ public class ObSprite implements DisplayableSprite {
             System.err.println("Error loading image: " + e);
         }
 
-        baseImage = normalImage;      // ✅
+        baseImage = normalImage;     
         currentImage = baseImage;
     }
 
@@ -209,6 +209,7 @@ public class ObSprite implements DisplayableSprite {
                     && !((JetBatteryPortal) sprite).getCollide()) {
                 jetBattery = 5;
                 ((JetBatteryPortal) sprite).setCollide(true);
+                ((JetBatteryPortal) sprite).setDispose(true);
             }
 
             if (sprite instanceof FloorSprite && checkCollision(sprite)) {
