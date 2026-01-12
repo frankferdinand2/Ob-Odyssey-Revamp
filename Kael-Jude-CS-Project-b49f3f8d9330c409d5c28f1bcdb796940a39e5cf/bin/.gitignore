@@ -4,13 +4,14 @@
 /AnimationFrame$3.class
 /AnimationFrame$4.class
 /AnimationFrame$5.class
-/AnimationFrame$6.class
 /AnimationFrame$AnimationPanel.class
 /AnimationFrame.class
 /AudioPlayer$1.class
 /AudioPlayer.class
 /Background.class
 /CSVReader.class
+/CharacterSelectionInitiate.class
+/CharacterToSelect.class
 /CollisionDetection.class
 /ConsoleUtility.class
 /DisplayableSprite.class
@@ -19,6 +20,7 @@
 /HomeSprite.class
 /ImageRotator.class
 /InfiniteButton.class
+/JetBatteryPortal.class
 /JetpackSprite.class
 /KeyboardInput$KeyState.class
 /KeyboardInput.class
@@ -38,8 +40,3 @@
 /Universe.class
 /VirtualSprite.class
 /WallSprite.class
-/AnimationFrame$7.class
-/JetBatteryPortal.class
-/CharacterSelection.class
-/CharacterSelectionInitiate.class
-/CharacterToSelect.class
