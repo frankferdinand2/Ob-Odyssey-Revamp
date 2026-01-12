@@ -249,7 +249,7 @@ public class AnimationFrame extends JFrame {
 	{
 	    lblAttempts = new JLabel("attempts: 0");
 	    lblAttempts.setForeground(Color.BLACK);
-	    lblAttempts.setFont(new Font("Gotham", Font.PLAIN, 24));
+	    lblAttempts.setFont(new Font("NSimSun", Font.PLAIN, 24));
 	    lblAttempts.setBounds(550, 50, 300, 40); 
 	    lblAttempts.setOpaque(false);
 
@@ -264,8 +264,8 @@ public class AnimationFrame extends JFrame {
 	{
 	    gameTitle = new JLabel("Ob's Odyssey");
 	    gameTitle.setForeground(Color.BLACK);
-	    gameTitle.setFont(new Font("DK Early Morning Coffee", Font.BOLD, 120));
-	    gameTitle.setBounds(330, 300, 1300, 200); 
+	    gameTitle.setFont(new Font("Pristina", Font.BOLD, 120));
+	    gameTitle.setBounds(350, 300, 1300, 200); 
 	    gameTitle.setOpaque(false);
 
 	    SwingUtilities.invokeLater(() -> {
