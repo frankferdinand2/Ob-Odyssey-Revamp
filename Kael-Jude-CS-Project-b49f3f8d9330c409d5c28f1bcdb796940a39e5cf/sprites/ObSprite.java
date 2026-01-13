@@ -186,7 +186,7 @@ public class ObSprite implements DisplayableSprite {
             velocityY = -velocityY * BOUNCE_DAMPENING;
             if (Math.abs(velocityY) < MIN_VELOCITY_THRESHOLD && !keyboard.keyDown(38))
                 velocityY = 0;
-			audioPlayer.play("res/cartoon-boing.wav");
+			//audioPlayer.play("res/cartoon-boing.wav");
 
         }
 
@@ -206,7 +206,7 @@ public class ObSprite implements DisplayableSprite {
                 jetPower = -DEFAULT_JET_POWER;
 
                 if (!happened) {
-                    currentImage = ImageRotator.rotate(baseImage, 270); // ✅ fixed
+                    currentImage = ImageRotator.rotate(baseImage, 270); 
                     happened = true;
                 }
             }
@@ -219,7 +219,7 @@ public class ObSprite implements DisplayableSprite {
             }
 
             if (sprite instanceof FloorSprite && checkCollision(sprite)) {
-				audioPlayer.play("res/cartoon-boing.wav");
+				//audioPlayer.play("res/cartoon-boing.wav");
                 if (velocityY > 0) {
                     centerY = sprite.getMinY() - height / 2;
                     velocityY = -velocityY * BOUNCE_DAMPENING;
