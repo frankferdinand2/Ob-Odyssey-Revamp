@@ -160,6 +160,8 @@ public class ShellUniverse implements Universe {
                flappy = ob.getFlappyMode();
                reversed = ob.getReversed();
            }
+           else {
+           }
            if (sprite instanceof HomeSprite && ((HomeSprite) sprite).isClicked()) {
                mainScreen = true;
                infiniteMode = false;
@@ -198,6 +200,9 @@ public class ShellUniverse implements Universe {
            }
            
        }
+       for (Background bg : backgrounds) {
+    	    bg.update(this, actual_delta_time);
+    	}
        
        if (resetLevel && !mainScreen && !infiniteMode) resetLevel();
        if (nextLevel && !mainScreen && !infiniteMode) nextLevel();
@@ -494,8 +499,8 @@ public class ShellUniverse implements Universe {
 	   sprites.add(new CharacterToSelect(-100, 55, "res/SpriteImages/ObSprite.png"));
 	   sprites.add(new CharacterToSelect(-100, -55, "res/SpriteImages/AngryObSprite.png"));
 	   sprites.add(new CharacterToSelect(0, 55, "res/SpriteImages/AngryAuraObSprite.png"));
-	   sprites.add(new CharacterToSelect(0, -55, "res/SpriteImages/AurafulObSprite.png"));
-	   sprites.add(new CharacterToSelect(100, 55, "res/SpriteImages/ColdObSprite.png"));
+	   sprites.add(new CharacterToSelect(0, -55, "res/SpriteImages/goofychicken.png"));
+	   sprites.add(new CharacterToSelect(100, 55, "res/SpriteImages/crazy-horn-rhino.png"));
 	   sprites.add(new CharacterToSelect(100, -55, "res/SpriteImages/PlasticSurgeryObSprite.png"));
    }
    

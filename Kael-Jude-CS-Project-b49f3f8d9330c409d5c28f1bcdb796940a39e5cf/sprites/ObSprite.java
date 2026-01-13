@@ -37,7 +37,7 @@ public class ObSprite implements DisplayableSprite {
     private boolean levelComplete = false;
     private boolean happened = false;
     private boolean found = false;
-
+    private boolean boing = false;
 
     public ObSprite(double centerX, double centerY) {
         this.centerX = centerX;
@@ -145,7 +145,11 @@ public class ObSprite implements DisplayableSprite {
         }
 
         String shellPath = u.getObImagePath();
+        if (shellPath == "res/SpriteImages/goofychicken.png") {
+        	boing = true;
+        }
         Image newBase = normalImage;
+    	AudioPlayer audioPlayer = new AudioPlayer();
 
         if (shellPath != null && !shellPath.equals(IMAGE_PATH)) {
             try {
@@ -182,6 +186,8 @@ public class ObSprite implements DisplayableSprite {
             velocityY = -velocityY * BOUNCE_DAMPENING;
             if (Math.abs(velocityY) < MIN_VELOCITY_THRESHOLD && !keyboard.keyDown(38))
                 velocityY = 0;
+			audioPlayer.play("res/cartoon-boing.wav");
+
         }
 
         if (centerY - (height / 2) <= ROOF_Y) {
@@ -213,6 +219,7 @@ public class ObSprite implements DisplayableSprite {
             }
 
             if (sprite instanceof FloorSprite && checkCollision(sprite)) {
+				audioPlayer.play("res/cartoon-boing.wav");
                 if (velocityY > 0) {
                     centerY = sprite.getMinY() - height / 2;
                     velocityY = -velocityY * BOUNCE_DAMPENING;
