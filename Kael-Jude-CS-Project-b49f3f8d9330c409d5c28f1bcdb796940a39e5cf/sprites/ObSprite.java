@@ -6,7 +6,7 @@ import javax.imageio.ImageIO;
 public class ObSprite implements DisplayableSprite {
 
     private static final String IMAGE_PATH = "res/SpriteImages/ObSprite.png";
-
+    private static final AudioPlayer SOUND_FX = new AudioPlayer();
     private static final double DEFAULT_WIDTH = 85.0;
     private static final double DEFAULT_HEIGHT = 85.0;
     private static final double GROUND_Y = 360.0 - 35.0;
@@ -16,9 +16,12 @@ public class ObSprite implements DisplayableSprite {
     private static final double DEFAULT_JET_POWER = -1000;
     private static final double DEFAULT_GRAVITY = 450;
 
+    private boolean imageSynced = false;
     private boolean flappyMode = false;
     private double flapVelocity = -300;
     private double jetBattery = 2000;
+    private boolean wasOnGround = false;
+    private boolean wasOnRoof = false; // lol roof
 
     private static Image normalImage;
 
@@ -144,26 +147,27 @@ public class ObSprite implements DisplayableSprite {
             found = true;
         }
 
-        String shellPath = u.getObImagePath();
-        if (shellPath == "res/SpriteImages/goofychicken.png") {
-        	boing = true;
-        }
-        Image newBase = normalImage;
-    	AudioPlayer audioPlayer = new AudioPlayer();
-
-        if (shellPath != null && !shellPath.equals(IMAGE_PATH)) {
-            try {
-                Image img = ImageIO.read(new File(shellPath));
-                if (img != null) newBase = img;
-            } catch (IOException e) {
-                System.err.println("Error loading shell image: " + e);
+        if (!imageSynced) {
+            String shellPath = u.getObImagePath();
+            Image img = normalImage;
+            
+            if (shellPath == "res/SpriteImages/goofychicken.png") {
+            	boing= true;
             }
+            if (shellPath != null && !shellPath.equals(IMAGE_PATH)) {
+                try {
+                    img = ImageIO.read(new File(shellPath));
+                } catch (IOException e) {
+                    System.err.println("Error loading shell image: " + e);
+                }
+            }
+
+            baseImage = img;
+            currentImage = reversed ? ImageRotator.rotate(baseImage, 270) : baseImage;
+
+            imageSynced = true;
         }
 
-        baseImage = newBase;
-        currentImage = reversed
-                ? ImageRotator.rotate(baseImage, 270)
-                : baseImage;
 
         KeyboardInput keyboard = KeyboardInput.getKeyboard();
         boolean jetActive = keyboard.keyDown(38) && jetBattery > 0;
@@ -181,21 +185,39 @@ public class ObSprite implements DisplayableSprite {
         velocityY += gravity * deltaTime;
         centerY += velocityY * deltaTime;
 
-        if (centerY + (height / 2) >= GROUND_Y) {
+        boolean onGroundNow = centerY + (height / 2) >= GROUND_Y;
+
+        if (onGroundNow) {
+
+            if (!wasOnGround && boing && !reversed) {
+                SOUND_FX.playAsynchronous("res/cartoon-boing.wav");
+            }
             centerY = GROUND_Y - (height / 2);
             velocityY = -velocityY * BOUNCE_DAMPENING;
-            if (Math.abs(velocityY) < MIN_VELOCITY_THRESHOLD && !keyboard.keyDown(38))
-                velocityY = 0;
-			//audioPlayer.play("res/cartoon-boing.wav");
 
+            if (Math.abs(velocityY) < MIN_VELOCITY_THRESHOLD && !keyboard.keyDown(38)) {
+                velocityY = 0;
+            }
         }
 
-        if (centerY - (height / 2) <= ROOF_Y) {
+        wasOnGround = onGroundNow;
+
+        boolean onRoofNow = centerY - (height / 2) <= ROOF_Y;
+
+        if (onRoofNow) {
             centerY = ROOF_Y + (height / 2);
             velocityY = -velocityY * BOUNCE_DAMPENING;
-            if (Math.abs(velocityY) < MIN_VELOCITY_THRESHOLD && !keyboard.keyDown(38))
+            if (!wasOnRoof && boing && reversed) {
+                SOUND_FX.playAsynchronous("res/cartoon-boing.wav");
+            }
+            
+            if (Math.abs(velocityY) < MIN_VELOCITY_THRESHOLD && !keyboard.keyDown(38)) {
                 velocityY = 0;
+
+            }
         }
+        
+        wasOnRoof = onRoofNow;
 
         for (DisplayableSprite sprite : universe.getSprites()) {
 
@@ -219,7 +241,9 @@ public class ObSprite implements DisplayableSprite {
             }
 
             if (sprite instanceof FloorSprite && checkCollision(sprite)) {
-				//audioPlayer.play("res/cartoon-boing.wav");
+                if ((boing && velocityY < 0 && reversed) || (boing && velocityY > 0 && !reversed)) {
+                	SOUND_FX.playAsynchronous("res/cartoon-boing.wav");
+                }
                 if (velocityY > 0) {
                     centerY = sprite.getMinY() - height / 2;
                     velocityY = -velocityY * BOUNCE_DAMPENING;
