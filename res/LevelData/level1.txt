@@ -5,7 +5,7 @@ ObSpeed 600
 # floor
 Spike 300 270 100 100 res/SpriteImages/SpikeImages/Box100x100.png
 Spike 450 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-ReverseGravityPortal 0 0
+
 
 
 # ceiling
