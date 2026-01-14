@@ -397,6 +397,68 @@ public class ShellUniverse implements Universe {
                lastPortal++;
                lastCharge++;
            }
+           else if (rand.nextInt(12) == 2) {
+        	   String img = "res/SpriteImages/SpikeImages/Boulder300x300.png";
+        	   SpikeSprite spike = new SpikeSprite(x, y, 300, 300, img);
+        	   pendingSprites.add(spike);
+               infiniteSprites.add(spike);
+               lastPortal++;
+               lastCharge++;
+           }
+           else if (rand.nextInt(50) == 2) {
+        	   String img = "res/SpriteImages/SpikeImages/Sun100x100.png";
+        	   SpikeSprite spike = new SpikeSprite(x, y, 300, 300, img);
+        	   pendingSprites.add(spike);
+               infiniteSprites.add(spike);
+               lastPortal++;
+               lastCharge++;
+           }
+           else if (rand.nextInt(500) == 2) {
+        	   String img = "res/SpriteImages/SpikeImages/nerd.png";
+        	   SpikeSprite spike = new SpikeSprite(x, y, 100, 100, img);
+        	   pendingSprites.add(spike);
+               infiniteSprites.add(spike);
+               lastPortal++;
+               lastCharge++;
+           }
+           else if (rand.nextInt(20) == 2) {
+        	   if (rand.nextInt(2) == 1) {
+        		   String img = "res/SpriteImages/SpikeImages/Crystal200x200.png";
+            	   SpikeSprite spike = new SpikeSprite(x, 280, 200, 200, img);
+            	   pendingSprites.add(spike);
+                   infiniteSprites.add(spike);
+                   lastPortal++;
+                   lastCharge++;
+        	   }
+        	   else {
+        		   String img = "res/SpriteImages/SpikeImages/CrystalInverted200x200.png";
+            	   SpikeSprite spike = new SpikeSprite(x, -280, 200, 200, img);
+            	   pendingSprites.add(spike);
+                   infiniteSprites.add(spike);
+                   lastPortal++;
+                   lastCharge++;
+        	   }
+        	   
+           }
+           else if (rand.nextInt(15) == 2) {
+        	   if (rand.nextInt(2) == 1) {
+        		   String img = "res/SpriteImages/SpikeImages/Grass200x20.png";
+            	   SpikeSprite spike = new SpikeSprite(x, 350, 200, 20, img);
+            	   pendingSprites.add(spike);
+                   infiniteSprites.add(spike);
+                   lastPortal++;
+                   lastCharge++;
+        	   }
+        	   else {
+        		   String img = "res/SpriteImages/SpikeImages/GrassInverted200x20.png";
+            	   SpikeSprite spike = new SpikeSprite(x, -350, 200, 20, img);
+            	   pendingSprites.add(spike);
+                   infiniteSprites.add(spike);
+                   lastPortal++;
+                   lastCharge++;
+        	   }
+        	   
+           }
            else if (rand.nextInt(6) == 2) {
         	   String img = "res/SpriteImages/SpikeImages/Plant200x400.png";
         	   SpikeSprite spike = new SpikeSprite(x, 140, 200, 400, img);
@@ -498,7 +560,7 @@ public class ShellUniverse implements Universe {
 	   sprites.clear();
 	   sprites.add(new CharacterToSelect(-100, 55, "res/SpriteImages/ObSprite.png"));
 	   sprites.add(new CharacterToSelect(-100, -55, "res/SpriteImages/AngryObSprite.png"));
-	   sprites.add(new CharacterToSelect(0, 55, "res/SpriteImages/AngryAuraObSprite.png"));
+	   sprites.add(new CharacterToSelect(0, 55, "res/SpriteImages/HamsterObSprite.png"));
 	   sprites.add(new CharacterToSelect(0, -55, "res/SpriteImages/goofychicken.png"));
 	   sprites.add(new CharacterToSelect(100, 55, "res/SpriteImages/crazy-horn-rhino.png"));
 	   sprites.add(new CharacterToSelect(100, -55, "res/SpriteImages/PlasticSurgeryObSprite.png"));
