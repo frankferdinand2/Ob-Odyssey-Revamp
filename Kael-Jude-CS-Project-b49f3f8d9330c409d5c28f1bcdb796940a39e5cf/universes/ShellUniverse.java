@@ -559,7 +559,7 @@ public class ShellUniverse implements Universe {
    public void characterSelection() {
 	   sprites.clear();
 	   sprites.add(new CharacterToSelect(-100, 55, "res/SpriteImages/ObSprite.png"));
-	   sprites.add(new CharacterToSelect(-100, -55, "res/SpriteImages/AngryObSprite.png"));
+	   sprites.add(new CharacterToSelect(-100, -55, "res/SpriteImages/nico.png"));
 	   sprites.add(new CharacterToSelect(0, 55, "res/SpriteImages/HamsterObSprite.png"));
 	   sprites.add(new CharacterToSelect(0, -55, "res/SpriteImages/goofychicken.png"));
 	   sprites.add(new CharacterToSelect(100, 55, "res/SpriteImages/crazy-horn-rhino.png"));
