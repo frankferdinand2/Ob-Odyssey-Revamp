@@ -115,6 +115,8 @@ public class AudioPlayer implements LineListener {
 		} catch (Exception ex) {
 			System.out.println("Error playing the audio file.");
 			playCompleted = false;
+		    ex.printStackTrace();   
+
 		}
 
 	}
