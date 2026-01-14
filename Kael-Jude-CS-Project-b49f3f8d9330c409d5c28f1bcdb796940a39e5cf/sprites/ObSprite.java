@@ -190,7 +190,8 @@ public class ObSprite implements DisplayableSprite {
         if (onGroundNow) {
 
             if (!wasOnGround && boing && !reversed) {
-                SOUND_FX.playAsynchronous("res/cartoon-boing.wav");
+                SOUND_FX.setStop(true);
+            	SOUND_FX.playAsynchronous("res/boing.wav");
             }
             centerY = GROUND_Y - (height / 2);
             velocityY = -velocityY * BOUNCE_DAMPENING;
@@ -208,7 +209,8 @@ public class ObSprite implements DisplayableSprite {
             centerY = ROOF_Y + (height / 2);
             velocityY = -velocityY * BOUNCE_DAMPENING;
             if (!wasOnRoof && boing && reversed) {
-                SOUND_FX.playAsynchronous("res/cartoon-boing.wav");
+            	SOUND_FX.setStop(true);
+                SOUND_FX.playAsynchronous("res/boing.wav");
             }
             
             if (Math.abs(velocityY) < MIN_VELOCITY_THRESHOLD && !keyboard.keyDown(38)) {
@@ -241,8 +243,9 @@ public class ObSprite implements DisplayableSprite {
             }
 
             if (sprite instanceof FloorSprite && checkCollision(sprite)) {
-                if ((boing && velocityY < 0 && reversed) || (boing && velocityY > 0 && !reversed)) {
-                	SOUND_FX.playAsynchronous("res/cartoon-boing.wav");
+                if ((boing && reversed) || (boing && !reversed)) {
+                	SOUND_FX.setStop(true);
+                	SOUND_FX.playAsynchronous("res/boing.wav");
                 }
                 if (velocityY > 0) {
                     centerY = sprite.getMinY() - height / 2;
