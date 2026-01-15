@@ -350,18 +350,18 @@ public class ShellUniverse implements Universe {
 
 	   	int count = 1 + rand.nextInt(3);
 	   	
-	    int minSpacing = 600; 
+	    int minSpacing = 1000; 
 	    if (lightYears >= 100 && lightYears < 1000) { 
-	    	minSpacing = 550;
+	    	minSpacing = 900;
 	    }
 	    else if (lightYears >= 1000 && lightYears < 2500) {
-	    	minSpacing = 500;
+	    	minSpacing = 800;
 	    }
 	    else if (lightYears >= 2500 && lightYears < 5000) {
-	    	minSpacing = 250;
+	    	minSpacing = 700;
 	    }
 	    else if (lightYears > 5000 && lightYears < 10000) {
-	    	minSpacing = 100;
+	    	minSpacing = 650;
 	    }
 
 	    for (int i = 0; i < count; i++) {
