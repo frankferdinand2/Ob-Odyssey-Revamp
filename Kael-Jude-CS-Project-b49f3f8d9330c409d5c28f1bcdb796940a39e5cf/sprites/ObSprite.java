@@ -15,19 +15,19 @@ public class ObSprite implements DisplayableSprite {
     private static final double MIN_VELOCITY_THRESHOLD = 10.0;
     private static final double DEFAULT_JET_POWER = -1000;
     private static final double DEFAULT_GRAVITY = 450;
-
+    
     private boolean imageSynced = false;
     private boolean flappyMode = false;
     private double flapVelocity = -300;
     private double jetBattery = 2000;
+    private boolean loadFrame = false;
     private boolean wasOnGround = false;
-    private boolean wasOnRoof = false; // lol roof
-
+    private boolean wasOnRoof = false;
     private static Image normalImage;
 
     private Image baseImage;    
     private Image currentImage;
-
+    private boolean visible = false;
     private double gravity;
     private double centerX;
     private double centerY;
@@ -79,7 +79,7 @@ public class ObSprite implements DisplayableSprite {
 	}
     
     public boolean getVisible() { 
-    	return true; 
+    	return visible; 
 	}
 
     public double getMinX() { 
@@ -141,19 +141,24 @@ public class ObSprite implements DisplayableSprite {
     public void update(Universe universe, long actualDeltaTime) {
         double deltaTime = actualDeltaTime * 0.001;
         ShellUniverse u = (ShellUniverse) universe;
+        String shellPath = u.getObImagePath();
 
+        boing = "res/SpriteImages/goofychicken.png".equals(shellPath);
+
+        if (loadFrame) {
+        	visible = true;
+        }
+        loadFrame = true;
+        
         if (!found) {
             jetBattery = u.getJetpackBattery();
             found = true;
         }
-
+        
         if (!imageSynced) {
-            String shellPath = u.getObImagePath();
             Image img = normalImage;
             
-            if (shellPath == "res/SpriteImages/goofychicken.png") {
-            	boing= true;
-            }
+
             if (shellPath != null && !shellPath.equals(IMAGE_PATH)) {
                 try {
                     img = ImageIO.read(new File(shellPath));
@@ -167,7 +172,6 @@ public class ObSprite implements DisplayableSprite {
 
             imageSynced = true;
         }
-
 
         KeyboardInput keyboard = KeyboardInput.getKeyboard();
         boolean jetActive = keyboard.keyDown(38) && jetBattery > 0;
@@ -187,37 +191,31 @@ public class ObSprite implements DisplayableSprite {
 
         boolean onGroundNow = centerY + (height / 2) >= GROUND_Y;
 
-        if (onGroundNow) {
-
-            if (!wasOnGround && boing && !reversed) {
-                SOUND_FX.setStop(true);
-            	SOUND_FX.playAsynchronous("res/boing.wav");
-            }
+        if (onGroundNow && velocityY > 0) {
             centerY = GROUND_Y - (height / 2);
             velocityY = -velocityY * BOUNCE_DAMPENING;
 
-            if (Math.abs(velocityY) < MIN_VELOCITY_THRESHOLD && !keyboard.keyDown(38)) {
-                velocityY = 0;
+            if (boing && !reversed && Math.abs(velocityY) > 50) {
+                SOUND_FX.setStop(true);
+                SOUND_FX.playAsynchronous("res/boing.wav");
             }
         }
+
 
         wasOnGround = onGroundNow;
 
         boolean onRoofNow = centerY - (height / 2) <= ROOF_Y;
 
-        if (onRoofNow) {
+        if (onRoofNow && velocityY < 0) {
             centerY = ROOF_Y + (height / 2);
             velocityY = -velocityY * BOUNCE_DAMPENING;
-            if (!wasOnRoof && boing && reversed) {
-            	SOUND_FX.setStop(true);
+
+            if (boing && reversed && Math.abs(velocityY) > 50) {
+                SOUND_FX.setStop(true);
                 SOUND_FX.playAsynchronous("res/boing.wav");
             }
-            
-            if (Math.abs(velocityY) < MIN_VELOCITY_THRESHOLD && !keyboard.keyDown(38)) {
-                velocityY = 0;
-
-            }
         }
+
         
         wasOnRoof = onRoofNow;
 
@@ -243,20 +241,29 @@ public class ObSprite implements DisplayableSprite {
             }
 
             if (sprite instanceof FloorSprite && checkCollision(sprite)) {
-                if ((boing && reversed) || (boing && !reversed)) {
-                	SOUND_FX.setStop(true);
-                	SOUND_FX.playAsynchronous("res/boing.wav");
-                }
+
                 if (velocityY > 0) {
                     centerY = sprite.getMinY() - height / 2;
                     velocityY = -velocityY * BOUNCE_DAMPENING;
-                } else if (velocityY < 0) {
+
+                    if (boing && Math.abs(velocityY) > 50) {
+                        SOUND_FX.setStop(true);
+                        SOUND_FX.playAsynchronous("res/boing.wav");
+                    }
+                }
+                else if (velocityY < 0) {
                     centerY = sprite.getMaxY() + height / 2;
                     velocityY = -velocityY * BOUNCE_DAMPENING;
+
+                    if (boing && Math.abs(velocityY) > 50) {
+                        SOUND_FX.setStop(true);
+                        SOUND_FX.playAsynchronous("res/boing.wav");
+                    }
                 }
 
-                if (Math.abs(velocityY) < MIN_VELOCITY_THRESHOLD && !keyboard.keyDown(38))
+                if (Math.abs(velocityY) < MIN_VELOCITY_THRESHOLD && !keyboard.keyDown(38)) {
                     velocityY = 0;
+                }
             }
 
             if (sprite instanceof StatusRemoverSprite && checkCollision(sprite)) {
