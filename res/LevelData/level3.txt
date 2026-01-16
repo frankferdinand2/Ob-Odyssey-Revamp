@@ -1,0 +1,16 @@
+ObSpeed 600
+JetpackBattery 4
+
+# <object type> <x position> <y position> <width> <height> <image path>
+
+
+# FOR 1 BIG IMAGE: 680px tall, -19 offset
+
+Spike 7000 -19 14000 680 res/SpriteImages/SpikeImages/level2.png
+
+ReverseGravityPortal 5300 0
+StatusRemover 9700 -150
+
+LevelEnding 14200 0 500 500
+
+
