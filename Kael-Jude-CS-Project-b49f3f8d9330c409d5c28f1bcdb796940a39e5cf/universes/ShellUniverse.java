@@ -579,7 +579,7 @@ public class ShellUniverse implements Universe {
 	   sprites.add(new CharacterToSelect(200, 55, "res/SpriteImages/notOb.png"));
 
 	   sprites.add(new CharacterToSelect(200, -55, "res/SpriteImages/flyingbull.png"));
-
+	   sprites.add(new CharacterToSelect(-200, -55, "res/SpriteImages/rice.png"));
    }
    
    public String getTextOnScreen() {

@@ -9,6 +9,7 @@
 /AudioPlayer$1.class
 /AudioPlayer.class
 /Background.class
+/BatterySprite.class
 /CSVReader.class
 /CharacterSelectionInitiate.class
 /CharacterToSelect.class
@@ -40,5 +41,3 @@
 /Universe.class
 /VirtualSprite.class
 /WallSprite.class
-/BatterySprite.class
-/BatteryCoverSprite.class
