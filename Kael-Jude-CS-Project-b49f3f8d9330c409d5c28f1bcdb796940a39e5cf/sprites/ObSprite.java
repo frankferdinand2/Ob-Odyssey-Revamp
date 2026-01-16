@@ -24,10 +24,11 @@ public class ObSprite implements DisplayableSprite {
     private boolean wasOnGround = false;
     private boolean wasOnRoof = false;
     private static Image normalImage;
+    private double originalJetpackBattery;
 
     private Image baseImage;    
     private Image currentImage;
-    private boolean visible = false;
+    private boolean visible = true;
     private double gravity;
     private double centerX;
     private double centerY;
@@ -137,6 +138,10 @@ public class ObSprite implements DisplayableSprite {
     public void setDispose(boolean dispose) { 
     	this.dispose = dispose;
 	}
+    
+    public double getJetRatio() {
+    	return (jetBattery/originalJetpackBattery) * 100;
+    }
 
     public void update(Universe universe, long actualDeltaTime) {
         double deltaTime = actualDeltaTime * 0.001;
@@ -146,10 +151,12 @@ public class ObSprite implements DisplayableSprite {
         boing = "res/SpriteImages/goofychicken.png".equals(shellPath);
 
         if (loadFrame) {
+        	
         	visible = true;
         }
-        loadFrame = true;
+        loadFrame = false;
         
+        originalJetpackBattery = u.getJetpackBattery();
         if (!found) {
             jetBattery = u.getJetpackBattery();
             found = true;
@@ -235,7 +242,7 @@ public class ObSprite implements DisplayableSprite {
 
             if (sprite instanceof JetBatteryPortal && checkCollision(sprite)
                     && !((JetBatteryPortal) sprite).getCollide()) {
-                jetBattery = 5;
+                jetBattery = originalJetpackBattery;
                 ((JetBatteryPortal) sprite).setCollide(true);
                 ((JetBatteryPortal) sprite).setDispose(true);
             }

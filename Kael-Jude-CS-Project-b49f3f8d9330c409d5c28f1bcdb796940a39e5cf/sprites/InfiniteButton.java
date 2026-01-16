@@ -3,9 +3,9 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 public class InfiniteButton implements DisplayableSprite {
- 	private static final String IMAGE_PATH = "res/lambo.jpg";
-	private static final double WIDTH = 100;
-	private static final double HEIGHT = 200;
+ 	private static final String IMAGE_PATH = "res/SpriteImages/InfiniteButton.png";
+	private static final double WIDTH = 300;
+	private static final double HEIGHT = 100;
 	private static Image image;
 	
 	private double centerX;

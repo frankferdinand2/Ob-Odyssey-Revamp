@@ -3,11 +3,11 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class HomeSprite implements DisplayableSprite {
+public class BatterySprite implements DisplayableSprite {
   
-	private static final String IMAGE_PATH = "res/SpriteImages/HomeButton.png";
-	private static final double WIDTH = 100;
-	private static final double HEIGHT = 100;
+	private static final String IMAGE_PATH = "res/SpriteImages/Battery.png";
+	private static final double WIDTH = 300;
+	private static final double HEIGHT = 75;
 
 	private static Image image;
 	
@@ -17,7 +17,7 @@ public class HomeSprite implements DisplayableSprite {
 	private double height;
 	private boolean dispose;
 	
-	public HomeSprite(double centerX, double centerY) {
+	public BatterySprite(double centerX, double centerY) {
 		this.centerX = centerX;
 		this.centerY = centerY;
 		this.width = WIDTH;
@@ -93,17 +93,6 @@ public class HomeSprite implements DisplayableSprite {
 		this.dispose = dispose;
 	}
 	public void update(Universe universe, long actualDeltaTime) {
-	}
-	
-	public boolean isClicked() {
-	    if (!MouseInput.leftButtonDown) {
-	        return false;
-	    }
-
-	    double x = MouseInput.logicalX;
-	    double y = MouseInput.logicalY;
-
-	    return x >= getMinX() && x <= getMaxX() && y >= getMinY() && y <= getMaxY();
 	}
 				
 }

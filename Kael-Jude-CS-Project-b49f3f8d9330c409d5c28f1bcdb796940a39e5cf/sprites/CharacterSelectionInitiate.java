@@ -5,9 +5,9 @@ import javax.imageio.ImageIO;
 
 public class CharacterSelectionInitiate implements DisplayableSprite {
   
-	private static final String IMAGE_PATH = "res/SpriteImages/ObSprite.png";
-	private static final double WIDTH = 75;
-	private static final double HEIGHT = 75;
+	private static final String IMAGE_PATH = "res/SpriteImages/CharacterSelect.png";
+	private static final double WIDTH = 200;
+	private static final double HEIGHT = 200;
 
 	private static Image image;
 	

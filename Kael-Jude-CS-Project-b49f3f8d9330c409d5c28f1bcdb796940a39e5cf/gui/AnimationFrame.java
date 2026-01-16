@@ -259,6 +259,21 @@ public class AnimationFrame extends JFrame {
 	        getContentPane().setComponentZOrder(lblAttempts, 0); 
 	    });
 	}
+	
+	private JLabel lblTime; 
+	{
+	    lblTime = new JLabel("Battery: ");
+	    lblTime.setForeground(Color.BLACK);
+	    lblTime.setFont(new Font("NSimSun", Font.PLAIN, 24));
+	    lblTime.setBounds(1000, 50, 300, 40); 
+	    lblTime.setOpaque(false);
+
+	    SwingUtilities.invokeLater(() -> {
+	        getContentPane().setLayout(null); 
+	        getContentPane().add(lblTime);
+	        getContentPane().setComponentZOrder(lblTime, 0); 
+	    });
+	}
 
 	private JLabel gameTitle; 
 	{
@@ -280,7 +295,7 @@ public class AnimationFrame extends JFrame {
 	protected void updateControls() {
 	    if (universe != null && lblAttempts != null) {
 	        ShellUniverse shell = (ShellUniverse) universe;
-
+	        lblTime.setText(shell.getJetbatteryTime());
 	        lblAttempts.setText(shell.getTextOnScreen());
 
 	        if (shell.getMainScreen()) {

@@ -5,7 +5,7 @@ import javax.imageio.ImageIO;
 
 public class JetBatteryPortal implements DisplayableSprite {
   
-	private static final String IMAGE_PATH = "res/67.jpeg";
+	private static final String IMAGE_PATH = "res/SpriteImages/Gas.png";
 	private static final double DEFAULT_WIDTH = 50.0;
 	private static final double DEFAULT_HEIGHT = 50.0;
 
