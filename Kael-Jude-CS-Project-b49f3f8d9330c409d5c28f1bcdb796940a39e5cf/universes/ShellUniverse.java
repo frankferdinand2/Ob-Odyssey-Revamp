@@ -35,7 +35,8 @@ public class ShellUniverse implements Universe {
    private int infiniteTimer = 0;
    private String obImagePath = "res/SpriteImages/ObSprite.png";
    private boolean spawned = false;
-   
+   private String jetBatteryTime = "";
+
    
    public ShellUniverse() {
        this.setXCenter(0);
@@ -44,8 +45,7 @@ public class ShellUniverse implements Universe {
        if (!loadLevel(currentLevelPath)) {
            throw new RuntimeException("Level failed to load");
        }
-
-
+   
    }
    
    public void setObImagePath(String obImagePath) {
@@ -135,8 +135,10 @@ public class ShellUniverse implements Universe {
            
            if (infiniteMode && sprite.getCenterX() < -1500) {
                sprite.setDispose(true);
-           }
+           }	     
            
+           
+
            if (sprite instanceof SpikeSprite) {
         	   if (infiniteMode && !changed) {
             	   distance += -1 * (int) (actual_delta_time * 0.001 * ((SpikeSprite) sprite).getVelocityX());
@@ -145,10 +147,18 @@ public class ShellUniverse implements Universe {
            }
            if (mainScreen) {
         	   setTextOnScreen("");
+        	   jetBatteryTime = "";
            }
            if (infiniteMode) {
         	   lightYears = (int) (distance * 0.005);
-        	   setTextOnScreen("Lightyears: " + lightYears);
+        	   setTextOnScreen("lightyears: " + lightYears);
+        		    if (sprite instanceof HomeSprite) {
+        		        sprites.remove(sprite);
+        		        sprites.add(sprite); 
+        		        
+        		        break; 
+        		    }
+        		
            }
            if (sprite instanceof ObSprite) {
                ObSprite ob = (ObSprite) sprite;
@@ -156,7 +166,8 @@ public class ShellUniverse implements Universe {
                    nextLevel = true;
                    ob.setDispose(true);
                }
-               
+               jetBatteryTime = String.format("battery: %.1f", ob.getJetBattery());
+               setTextOnScreen("attempts: " + attempts);
                flappy = ob.getFlappyMode();
                reversed = ob.getReversed();
            }
@@ -188,12 +199,14 @@ public class ShellUniverse implements Universe {
         	   mainScreen = false;
         	   spawned = false;
            }
-          
+           
+           
            if (sprite instanceof CharacterToSelect && ((CharacterToSelect) sprite).isClicked()) {
         	   obImagePath = ((CharacterToSelect) sprite).getImagePath();
         	   characterSelection = false;
         	   mainScreen = true;
            }
+           
            if (nextLevel) {
         	   attempts = 0;
         	   
@@ -212,8 +225,6 @@ public class ShellUniverse implements Universe {
     	   spawned = true;
        }
        
-      
-
     if (infiniteMode) {
         infiniteTimer += actual_delta_time;
         if (infiniteTimer > 500) { 
@@ -270,7 +281,7 @@ public class ShellUniverse implements Universe {
        sprites.addAll(loadedSprites);
        sprites.add(new JetpackSprite(-400,0));
        sprites.add(new ObSprite(-400,0));
-       sprites.add(new HomeSprite(-600, -300));
+       sprites.add(new HomeSprite(-550, -300));
        return true;
    }
    private DisplayableSprite parseSprite(String[] t, int lineNumber) {
@@ -320,8 +331,8 @@ public class ShellUniverse implements Universe {
        sprites.clear();
        sprites.add(new PlaySprite(0,200));
        sprites.add(new InfiniteButton(0, -200));
-       sprites.add(new CharacterSelectionInitiate(-400, 200));
-       spawned = true;
+       sprites.add(new CharacterSelectionInitiate(-500, 0));
+       spawned = true;       
    }
    private void startInfiniteMode() {
        infiniteMode = true;
@@ -333,7 +344,7 @@ public class ShellUniverse implements Universe {
        sprites.clear();
        ObSprite ob = new ObSprite(-400, 0);
        JetpackSprite jetpack = new JetpackSprite(-400, 0);
-       HomeSprite home = new HomeSprite(-600, -300);
+       HomeSprite home = new HomeSprite(-550, -300);
        sprites.add(jetpack);
        sprites.add(ob);
        sprites.add(home);
@@ -574,11 +585,16 @@ public class ShellUniverse implements Universe {
    public String getTextOnScreen() {
 	   return textOnScreen;
    }
-   private void resetInfiniteMode() {
+   
+   public String getJetbatteryTime() {
+	   return jetBatteryTime;
+   }
+      private void resetInfiniteMode() {
        for (DisplayableSprite sprite : sprites) sprite.setDispose(true);
        disposeSprites();
        mainScreen = true;
        infiniteMode = false;
        mainScreen();
+
    }
 }
