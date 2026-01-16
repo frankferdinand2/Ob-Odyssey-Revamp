@@ -1,59 +1,13 @@
 ObSpeed 600
-
 JetpackBattery 2
 
 # <object type> <x position> <y position> <width> <height> <image path>
 
 
+# FOR 1 BIG IMAGE: 680px tall, -19 offset
 
-Floor 800 240 850 160
+Spike 5000 -19 10000 680 res/SpriteImages/SpikeImages/level1.png
 
-Spike 800 -200 300 300 res/SpriteImages/SpikeImages/Boulder300x300.png
-
-Spike 400 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-Spike 1200 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-
-
-Spike 2200 -260 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-
-Spike 2000 270 100 100 res/SpriteImages/SpikeImages/Box100x100.png
-Spike 2150 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-Spike 2200 70 100 100 res/SpriteImages/SpikeImages/Box100x100.png
-
-
-Spike 3000 220 200 200 res/SpriteImages/SpikeImages/Crystal200x200.png
-Spike 3200 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-Spike 3400 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-Spike 3600 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-
-Spike 3900 120 200 400 res/SpriteImages/SpikeImages/Plant200x400.png 
-# gonna be a big plant
-
-
-
-Spike 3700 -340 200 20 res/SpriteImages/SpikeImages/GrassInverted200x20.png
-Spike 3900 -340 200 20 res/SpriteImages/SpikeImages/GrassInverted200x20.png
-Spike 4100 -340 200 20 res/SpriteImages/SpikeImages/GrassInverted200x20.png 
-
-
-Spike 4200 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-Spike 4400 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-Spike 4600 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-Spike 4800 220 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-
-
-Spike 5300 -260 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-Spike 5600 -160 400 400 res/SpriteImages/SpikeImages/Box400x400.png
-Spike 5900 -260 200 200 res/SpriteImages/SpikeImages/Box200x200.png
-
-
-Spike 7000 120 200 400 res/SpriteImages/SpikeImages/Plant200x400.png 
-Spike 7300 120 200 400 res/SpriteImages/SpikeImages/Plant200x400.png 
-
-
-
-Spike 9800 0 300 300 res/SpriteImages/SpikeImages/Boulder300x300.png 
-
-LevelEnding 15000 0 500 500
+LevelEnding 10000 0 500 500
 
 

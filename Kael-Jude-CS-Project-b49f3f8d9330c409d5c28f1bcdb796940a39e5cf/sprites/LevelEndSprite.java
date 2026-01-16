@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class LevelEndSprite implements DisplayableSprite {
-	private static final String IMAGE_PATH = "res/fatty.png";
+	private static final String IMAGE_PATH = "res/SpriteImages/SpikeImages/portal.png";
 
 	private static Image image;
 
