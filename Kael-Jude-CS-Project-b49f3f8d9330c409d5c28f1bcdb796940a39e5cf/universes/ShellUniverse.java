@@ -3,6 +3,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Random;
+import java.awt.Color;
+
 public class ShellUniverse implements Universe {
    private boolean complete = false;   
    private ArrayList<DisplayableSprite> sprites = new ArrayList<>();
@@ -36,6 +38,18 @@ public class ShellUniverse implements Universe {
    private String obImagePath = "res/SpriteImages/ObSprite.png";
    private boolean spawned = false;
    private String jetBatteryTime = "";
+   private String backgroundHex = "#000000"; 
+   private final Color[] rainbow = {
+		    Color.decode("#FF0000"), //R
+		    Color.decode("#FF7F00"), //O
+		    Color.decode("#FFFF00"), //Y
+		    Color.decode("#00FF00"), //G
+		    Color.decode("#0000FF"), //B
+		    Color.decode("#4B0082"), //I
+		    Color.decode("#8B00FF")  //V
+};
+   
+   private Background shellBackground = null;
 
    
    public ShellUniverse() {
@@ -45,6 +59,8 @@ public class ShellUniverse implements Universe {
        if (!loadLevel(currentLevelPath)) {
            throw new RuntimeException("Level failed to load");
        }
+       shellBackground = new ShellBackground(2000, 2000); 
+       backgrounds.add(shellBackground);
    
    }
    
@@ -124,7 +140,9 @@ public class ShellUniverse implements Universe {
        for (int i = 0; i < sprites.size(); i++) {
            DisplayableSprite sprite = sprites.get(i);
            sprite.update(this, actual_delta_time);
-           if (infiniteMode && sprite instanceof ObSprite && sprite.getDispose()) {
+           
+           
+           if (infiniteMode && sprite instanceof ObSprite && sprite.getDispose() || sprite instanceof HomeSprite && ((HomeSprite) sprite).isClicked() ) {
                obDiedInInfinite = true;
                if (lightYears > highScoreInfinite) {
             	   highScoreInfinite = lightYears;
@@ -174,11 +192,15 @@ public class ShellUniverse implements Universe {
            else {
            }
            if (sprite instanceof HomeSprite && ((HomeSprite) sprite).isClicked()) {
-               mainScreen = true;
-               infiniteMode = false;
-               distance = 0; 
-               attempts = 0;
-           }
+        	    infiniteMode = false;
+        	    mainScreen = true;
+        	    resetLevel = false;
+        	    nextLevel = false;
+
+        	    sprites.clear();
+        	    mainScreen();
+        	    return; 
+        	}
            
            
            if (sprite instanceof ObSprite && sprite.getDispose() && !infiniteMode) {
@@ -232,7 +254,21 @@ public class ShellUniverse implements Universe {
             infiniteTimer = 0;
         }
     }
-    
+    for (DisplayableSprite sprite : sprites) {
+        if (sprite instanceof ObSprite) {
+            break;
+        }
+    }
+
+    if (infiniteMode) {
+    	double cycleSpeed = 32000;
+        double hue = (distance % cycleSpeed) / cycleSpeed; 
+        Color lerped = Color.getHSBColor((float) hue, 1.0f, 1.0f);
+        
+        backgroundHex = String.format("#%02X%02X%02X", lerped.getRed(), lerped.getGreen(), lerped.getBlue());
+    } else {
+        backgroundHex = "#90EE90";
+    }
        
        sprites.addAll(pendingSprites);
        pendingSprites.clear();
@@ -243,6 +279,10 @@ public class ShellUniverse implements Universe {
            infiniteMode = false;
            resetInfiniteMode();
        }
+       for (Background bg : backgrounds) {
+    	    bg.update(this, actual_delta_time);
+    	}
+
    }
    protected void disposeSprites() {
 	    for (DisplayableSprite sprite : sprites) {
@@ -348,7 +388,7 @@ public class ShellUniverse implements Universe {
        sprites.add(jetpack);
        sprites.add(ob);
        sprites.add(home);
-       sprites.add(new WallSprite(-1000, 0));
+       sprites.add(new WallSprite(-2000, 0));
        infiniteSprites.clear();
        jetpackBattery = 5;
        // Spawn starter spike to track ob speed (more importantly ob distance)
@@ -583,6 +623,8 @@ public class ShellUniverse implements Universe {
 	   sprites.add(new CharacterToSelect(-200, 55, "res/SpriteImages/gunsling.png"));
 	   sprites.add(new CharacterToSelect(-300, 55, "res/SpriteImages/fortnite.png"));
 	   sprites.add(new CharacterToSelect(-300, -55, "res/SpriteImages/mercedes.png"));
+	   sprites.add(new CharacterToSelect(300, -55, "res/star.png"));
+	   sprites.add(new CharacterToSelect(300, 55, "res/humpty.png"));
    }
    
    public String getTextOnScreen() {
@@ -600,4 +642,17 @@ public class ShellUniverse implements Universe {
        mainScreen();
 
    }
+      public Color getColour() {
+    	    return Color.decode(backgroundHex);
+    	}
+      
+      private Color lerpColor(Color c1, Color c2, double t) {
+    	    int r = (int) (c1.getRed() + t * (c2.getRed() - c1.getRed()));
+    	    int g = (int) (c1.getGreen() + t * (c2.getGreen() - c1.getGreen()));
+    	    int b = (int) (c1.getBlue() + t * (c2.getBlue() - c1.getBlue()));
+    	    return new Color(r, g, b);
+    	}
+
+      
+   
 }
