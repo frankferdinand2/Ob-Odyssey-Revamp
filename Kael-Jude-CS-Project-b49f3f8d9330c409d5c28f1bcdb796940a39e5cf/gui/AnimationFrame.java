@@ -331,7 +331,7 @@ public class AnimationFrame extends JFrame {
 			if (sprites != null) {
 			    for (DisplayableSprite activeSprite : new ArrayList<>(sprites)) {
 			        DisplayableSprite sprite = activeSprite;
-			        if (sprite.getVisible()) {
+			        if (sprite.getVisible() && sprite != null) {
 			            if (sprite.getImage() != null) {
 			                g.drawImage(sprite.getImage(),
 			                    translateToScreenX(sprite.getMinX()),

@@ -26,6 +26,8 @@ public class JetpackSprite implements DisplayableSprite {
     private boolean dispose;
     private boolean reversed;
     private int timeKeyUp = 0;
+    private boolean flappyAnimationActive = false;
+
     public JetpackSprite(double centerX, double centerY) {
         this.centerX = centerX;
         this.centerY = centerY;
@@ -150,7 +152,7 @@ public class JetpackSprite implements DisplayableSprite {
              	imageOn = normalImage;
              }
              else if (timeKeyUp > 3) {
-             	int check = timeKeyUp % 10;
+             	int check = timeKeyUp % 40;
              	if (check > 5) {
              		imageOn = frame3Image;
              	}
@@ -163,8 +165,13 @@ public class JetpackSprite implements DisplayableSprite {
              }
              
              
-             if (keyboard.keyDownOnce(38) && flappyMode) {
-             	imageOn = frame3Image;
+             if (flappyMode && keyboard.keyDownOnce(38)) {
+                 flappyAnimationActive = true; 
+             }
+
+             if (flappyAnimationActive) {
+                 imageOn = frame3Image;
+                 flappyAnimationActive = false; 
              }
         }
         else {

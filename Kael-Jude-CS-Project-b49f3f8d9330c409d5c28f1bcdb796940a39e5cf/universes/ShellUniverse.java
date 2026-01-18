@@ -285,8 +285,8 @@ public class ShellUniverse implements Universe {
 
    }
    protected void disposeSprites() {
-	    for (DisplayableSprite sprite : sprites) {
-	        if (sprite.getDispose()) {
+	   for (DisplayableSprite sprite : sprites) {
+	        if (sprite != null && sprite.getDispose()) {  
 	            disposalList.add(sprite);
 	            infiniteSprites.remove(sprite); 
 	        }
