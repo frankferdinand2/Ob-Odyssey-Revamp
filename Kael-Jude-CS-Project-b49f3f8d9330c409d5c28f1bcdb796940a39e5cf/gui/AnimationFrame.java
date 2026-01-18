@@ -20,7 +20,7 @@ import java.awt.event.MouseMotionAdapter;
 
 public class AnimationFrame extends JFrame {
 
-	final public static int FRAMES_PER_SECOND = 60;
+	final public static int FRAMES_PER_SECOND = 144;
 	protected long REFRESH_TIME = 1000 / FRAMES_PER_SECOND;	//MILLISECONDS
 
 	protected static int SCREEN_HEIGHT = 720;
