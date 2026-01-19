@@ -27,6 +27,7 @@ public class JetpackSprite implements DisplayableSprite {
     private boolean reversed;
     private int timeKeyUp = 0;
     private boolean flappyAnimationActive = false;
+    private double flappyAnimationTimer = 5;
 
     public JetpackSprite(double centerX, double centerY) {
         this.centerX = centerX;
@@ -171,7 +172,11 @@ public class JetpackSprite implements DisplayableSprite {
 
              if (flappyAnimationActive) {
                  imageOn = frame3Image;
-                 flappyAnimationActive = false; 
+                 flappyAnimationTimer -= 1;
+                 if (flappyAnimationTimer < 0) {
+                	 flappyAnimationActive = false ;
+                	 flappyAnimationTimer = 5 ;
+                 }
              }
         }
         else {
