@@ -41,6 +41,7 @@ public class ObSprite implements DisplayableSprite {
     private boolean levelComplete = false;
     private boolean happened = false;
     private boolean found = false;
+    private boolean invincible = false;
     private boolean boing = false;
 
     public ObSprite(double centerX, double centerY) {
@@ -193,7 +194,10 @@ public class ObSprite implements DisplayableSprite {
             velocityY = flapVelocity;
             jetBattery -= 0.1;
         }
-
+        
+        if (keyboard.keyDown(78)) {
+            invincible = true;
+        }
         velocityY += gravity * deltaTime;
         centerY += velocityY * deltaTime;
 
@@ -286,7 +290,7 @@ public class ObSprite implements DisplayableSprite {
                 flappyMode = true;
             }
 
-            if ((sprite instanceof WallSprite || sprite instanceof SpikeSprite) && checkCollision(sprite)) {
+            if ((sprite instanceof WallSprite || sprite instanceof SpikeSprite) && checkCollision(sprite) && !invincible) {
                 if (CollisionDetection.pixelBasedOverlaps(this, sprite)) {
                     dispose = true;
                 }

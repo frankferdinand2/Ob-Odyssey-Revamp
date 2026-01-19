@@ -18,7 +18,7 @@ public class ShellUniverse implements Universe {
    private double jetpackBattery;
    private String currentLevelPath;
    private boolean resetLevel = false;
-   private String[] levels = {"res/LevelData/level4.txt", "res/LevelData/level1.txt", "res/LevelData/level2.txt"};
+   private String[] levels = {"res/LevelData/level5.txt", "res/LevelData/level1.txt", "res/LevelData/level2.txt"};
    private int currentLevelIndex = 0;
    private boolean nextLevel = false;
    private boolean mainScreen = false;
@@ -39,15 +39,7 @@ public class ShellUniverse implements Universe {
    private boolean spawned = false;
    private String jetBatteryTime = "";
    private String backgroundHex = "#000000"; 
-   private final Color[] rainbow = {
-		    Color.decode("#FF0000"), //R
-		    Color.decode("#FF7F00"), //O
-		    Color.decode("#FFFF00"), //Y
-		    Color.decode("#00FF00"), //G
-		    Color.decode("#0000FF"), //B
-		    Color.decode("#4B0082"), //I
-		    Color.decode("#8B00FF")  //V
-};
+
    
    private Background shellBackground = null;
 

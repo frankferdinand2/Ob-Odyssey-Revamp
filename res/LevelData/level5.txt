@@ -1,0 +1,15 @@
+ObSpeed 600
+JetpackBattery 50
+
+# <object type> <x position> <y position> <width> <height> <image path>
+
+
+# FOR 1 BIG IMAGE: 680px tall, -19 offset
+
+Spike 10500 -19 20000 680 res/SpriteImages/SpikeImages/level5.png
+
+
+
+LevelEnding 21000 0 500 500
+
+
