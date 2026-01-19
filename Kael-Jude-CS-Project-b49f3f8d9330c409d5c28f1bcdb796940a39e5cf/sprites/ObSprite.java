@@ -191,6 +191,7 @@ public class ObSprite implements DisplayableSprite {
 
         if (flappyMode && keyboard.keyDownOnce(38)) {
             velocityY = flapVelocity;
+            jetBattery -= 0.1;
         }
 
         velocityY += gravity * deltaTime;
