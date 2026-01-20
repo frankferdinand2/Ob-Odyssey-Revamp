@@ -41,7 +41,7 @@ public class ShellUniverse implements Universe {
    private String backgroundHex = "#000000"; 
    private double[] levelHighScores = new double[levels.length];
    private double levelTimer = 0;
-   
+   private boolean highScores = false;
    private Background shellBackground = null;
 
    
@@ -55,6 +55,10 @@ public class ShellUniverse implements Universe {
        shellBackground = new ShellBackground(2000, 2000); 
        backgrounds.add(shellBackground);
    
+   }
+   
+   public boolean getHighScores() {
+	   return highScores;
    }
    
    public double getHighScore(int levelIndex) {
@@ -226,7 +230,12 @@ public class ShellUniverse implements Universe {
            }
            if (sprite instanceof PlaySprite && ((PlaySprite) sprite).isClicked()) {
                mainScreen = false;
+               highScores = false;
                if (!infiniteMode) resetLevel();
+           }
+           if (sprite instanceof HighScoreScreen && ((HighScoreScreen) sprite).isClicked()) {
+               mainScreen = false;
+               highScores = true;
            }
            if (sprite instanceof InfiniteButton && ((InfiniteButton) sprite).isClicked() && !infiniteMode) {
                startInfiniteMode();
@@ -401,6 +410,7 @@ public class ShellUniverse implements Universe {
        sprites.add(new PlaySprite(0,200));
        sprites.add(new InfiniteButton(0, -200));
        sprites.add(new CharacterSelectionInitiate(-500, 0));
+       sprites.add(new HighScoreScreen(500, 0));
        spawned = true;       
    }
    private void startInfiniteMode() {
