@@ -318,31 +318,44 @@ public class AnimationFrame extends JFrame {
 
 	
 	protected void updateControls() {
-	    if (universe != null && lblAttempts != null) {
-	        ShellUniverse shell = (ShellUniverse) universe;
-	        lblTime.setText(shell.getJetbatteryTime());
-	        lblAttempts.setText(shell.getTextOnScreen());
-	        if (shell.getMainScreen()) {
-	            gameTitle.setText("Ob's Odyssey");
-	        } else {
-	            gameTitle.setText("");
-	        }
-	        int currentLevel = shell.getCurrentLevelIndex();
+	    if (universe == null || lblAttempts == null) {
+	    	return;
+	    }
 
+	    ShellUniverse shell = (ShellUniverse) universe;
+
+	    lblTime.setText(shell.getJetbatteryTime());
+	    lblAttempts.setText(shell.getTextOnScreen());
+
+	    gameTitle.setText(shell.getMainScreen() ? "Ob's Odyssey" : "");
+
+	    int screenWidth = getContentPane().getWidth();
+	    int startY = 150;      
+	    int spacing = 60;    
+	    int labelWidth = 800;
+	    int labelHeight = 50;
+
+	    if (shell.getHighScores()) {
 	        for (int i = 0; i < lblHighScores.length; i++) {
-	            if (!shell.getMainScreen() && i == currentLevel) {
-	                lblHighScores[i].setText(
-	                    "Best Time (Level " + (i + 1) + "): " +
-	                    String.format("%.2f", shell.getHighScore(i))
-	                );
-	                lblHighScores[i].setVisible(true);
-	            } else {
-	                lblHighScores[i].setVisible(false);
-	            }
+	            JLabel lbl = lblHighScores[i];
+
+	            lbl.setText(
+	                "Level " + (i + 1) + "  —  Best Time: " + String.format("%.2f", shell.getHighScore(i))
+	            );
+
+	            int x = (screenWidth - labelWidth) / 2;
+	            int y = startY + i * spacing;
+
+	            lbl.setBounds(x, y, labelWidth, labelHeight);
+	            lbl.setVisible(true);
 	        }
-	        
+	    } else {
+	        for (JLabel lbl : lblHighScores) {
+	            lbl.setVisible(false);
+	        }
 	    }
 	}
+
 
 	private void handleKeyboardInput() {
 		if (keyboard.keyDownOnce(KeyboardInput.KEY_T)) {
