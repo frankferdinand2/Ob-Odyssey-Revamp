@@ -1,5 +1,5 @@
 ObSpeed 600
-JetpackBattery 4.5
+JetpackBattery 6
 
 # <object type> <x position> <y position> <width> <height> <image path>
 
@@ -10,6 +10,6 @@ Spike 4500 -19 10000 680 res/SpriteImages/SpikeImages/level3.png
 
 
 
-LevelEnding 7750 0 500 500
+LevelEnding 7500 0 500 500
 
 
