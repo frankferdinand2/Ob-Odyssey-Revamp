@@ -638,12 +638,7 @@ public class ShellUniverse implements Universe {
     	    return Color.decode(backgroundHex);
     	}
       
-      private Color lerpColor(Color c1, Color c2, double t) {
-    	    int r = (int) (c1.getRed() + t * (c2.getRed() - c1.getRed()));
-    	    int g = (int) (c1.getGreen() + t * (c2.getGreen() - c1.getGreen()));
-    	    int b = (int) (c1.getBlue() + t * (c2.getBlue() - c1.getBlue()));
-    	    return new Color(r, g, b);
-    	}
+
 
       
    
