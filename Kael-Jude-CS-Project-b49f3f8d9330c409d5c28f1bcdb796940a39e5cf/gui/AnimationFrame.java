@@ -305,7 +305,7 @@ public class AnimationFrame extends JFrame {
 	    });
 	}
 	
-	private static final int LEVEL_COUNT = 3;
+	private static final int LEVEL_COUNT = 5;
 	
 	private JLabel[] lblHighScores;
 	{
