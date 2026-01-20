@@ -132,6 +132,16 @@ public class ShellUniverse implements Universe {
    public void setYCenter(double yCenter) {
 	   
    }
+   
+   public String getTextInfinite() {
+	   if (!highScores) {
+		   return "";
+	   }
+	   else {
+		   return ("Most LightYears: " + highScoreInfinite);
+	   }
+	  
+   }
    public boolean isComplete() { 
 	   return complete; 
    }
@@ -155,7 +165,6 @@ public class ShellUniverse implements Universe {
    public void update(Animation animation, long actual_delta_time) {
 	   boolean changed = false;
        boolean obDiedInInfinite = false;
-       double deltaTime = actual_delta_time * 0.001;
 
        for (int i = 0; i < sprites.size(); i++) {
            DisplayableSprite sprite = sprites.get(i);
@@ -201,6 +210,10 @@ public class ShellUniverse implements Universe {
            if (sprite instanceof ObSprite) {
                ObSprite ob = (ObSprite) sprite;
                if (ob.getLevelComplete() && !infiniteMode) {
+            	   if (levelHighScores[currentLevelIndex] == 0 || levelTimer < levelHighScores[currentLevelIndex]) {
+       			    levelHighScores[currentLevelIndex] = levelTimer / 1000;
+            	   }    	   
+            	   levelTimer = 0;
                    nextLevel = true;
                    ob.setDispose(true);
                }
@@ -213,10 +226,11 @@ public class ShellUniverse implements Universe {
            }
            if (sprite instanceof HomeSprite && ((HomeSprite) sprite).isClicked()) {
         	    infiniteMode = false;
+        	    levelTimer = 0;
         	    mainScreen = true;
         	    resetLevel = false;
         	    nextLevel = false;
-
+        	    highScores = false;
         	    sprites.clear();
         	    mainScreen();
         	    return; 
@@ -236,6 +250,7 @@ public class ShellUniverse implements Universe {
            if (sprite instanceof HighScoreScreen && ((HighScoreScreen) sprite).isClicked()) {
                mainScreen = false;
                highScores = true;
+               highScoreScreen();
            }
            if (sprite instanceof InfiniteButton && ((InfiniteButton) sprite).isClicked() && !infiniteMode) {
                startInfiniteMode();
@@ -258,25 +273,16 @@ public class ShellUniverse implements Universe {
         	   attempts = 0;
         	   
            }
-           if (!mainScreen && !infiniteMode) {
-        	   levelTimer += deltaTime;
-           }
-           
+       
            
        }
-       for (Background bg : backgrounds) {
-    	    bg.update(this, actual_delta_time);
-    	}
+
        
        if (resetLevel && !mainScreen && !infiniteMode) {
     	   levelTimer = 0;
     	   resetLevel();
        }
        if (nextLevel && !mainScreen && !infiniteMode) {
-    	   if (levelHighScores[currentLevelIndex] == 0 | levelTimer < levelHighScores[currentLevelIndex]) {
-    			    levelHighScores[currentLevelIndex] = levelTimer;
-    	   }    	   
-    	   levelTimer = 0;
     	   nextLevel();
        }
        if (mainScreen && !infiniteMode) mainScreen();
@@ -292,6 +298,8 @@ public class ShellUniverse implements Universe {
             infiniteTimer = 0;
         }
     }
+    
+    
     for (DisplayableSprite sprite : sprites) {
         if (sprite instanceof ObSprite) {
             break;
@@ -320,6 +328,9 @@ public class ShellUniverse implements Universe {
        for (Background bg : backgrounds) {
     	    bg.update(this, actual_delta_time);
     	}
+       if (!mainScreen && !infiniteMode) {
+     	   levelTimer += actual_delta_time;
+        }
 
    }
    protected void disposeSprites() {
@@ -411,6 +422,12 @@ public class ShellUniverse implements Universe {
        sprites.add(new InfiniteButton(0, -200));
        sprites.add(new CharacterSelectionInitiate(-500, 0));
        sprites.add(new HighScoreScreen(500, 0));
+       spawned = true;       
+   }
+   
+   private void highScoreScreen() {
+       sprites.clear();
+       sprites.add(new HomeSprite(-550,-300));
        spawned = true;       
    }
    private void startInfiniteMode() {
