@@ -39,7 +39,8 @@ public class ShellUniverse implements Universe {
    private boolean spawned = false;
    private String jetBatteryTime = "";
    private String backgroundHex = "#000000"; 
-
+   private double[] levelHighScores = new double[levels.length];
+   private double levelTimer = 0;
    
    private Background shellBackground = null;
 
@@ -54,6 +55,27 @@ public class ShellUniverse implements Universe {
        shellBackground = new ShellBackground(2000, 2000); 
        backgrounds.add(shellBackground);
    
+   }
+   
+   public double getHighScore(int levelIndex) {
+       return levelHighScores[levelIndex];
+   }
+
+   public void setHighScore(int levelIndex, int score) {
+       if (score > levelHighScores[levelIndex]) {
+           levelHighScores[levelIndex] = score;
+       }
+   }
+   
+   public int getTotalLevels() {
+	   return levels.length;
+   }
+   public int getCurrentLevelIndex() {
+       return currentLevelIndex;
+   }
+   
+   public int getHighScoreInfinite() {
+	   return highScoreInfinite;
    }
    
    public void setObImagePath(String obImagePath) {
@@ -129,6 +151,8 @@ public class ShellUniverse implements Universe {
    public void update(Animation animation, long actual_delta_time) {
 	   boolean changed = false;
        boolean obDiedInInfinite = false;
+       double deltaTime = actual_delta_time * 0.001;
+
        for (int i = 0; i < sprites.size(); i++) {
            DisplayableSprite sprite = sprites.get(i);
            sprite.update(this, actual_delta_time);
@@ -225,14 +249,27 @@ public class ShellUniverse implements Universe {
         	   attempts = 0;
         	   
            }
+           if (!mainScreen && !infiniteMode) {
+        	   levelTimer += deltaTime;
+           }
+           
            
        }
        for (Background bg : backgrounds) {
     	    bg.update(this, actual_delta_time);
     	}
        
-       if (resetLevel && !mainScreen && !infiniteMode) resetLevel();
-       if (nextLevel && !mainScreen && !infiniteMode) nextLevel();
+       if (resetLevel && !mainScreen && !infiniteMode) {
+    	   levelTimer = 0;
+    	   resetLevel();
+       }
+       if (nextLevel && !mainScreen && !infiniteMode) {
+    	   if (levelHighScores[currentLevelIndex] == 0 | levelTimer < levelHighScores[currentLevelIndex]) {
+    			    levelHighScores[currentLevelIndex] = levelTimer;
+    	   }    	   
+    	   levelTimer = 0;
+    	   nextLevel();
+       }
        if (mainScreen && !infiniteMode) mainScreen();
        if (characterSelection && !spawned) {
     	   characterSelection();

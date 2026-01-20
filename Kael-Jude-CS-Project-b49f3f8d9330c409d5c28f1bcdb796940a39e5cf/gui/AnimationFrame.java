@@ -289,7 +289,32 @@ public class AnimationFrame extends JFrame {
 	        getContentPane().setComponentZOrder(gameTitle, 0); 
 	    });
 	}
+	
+	private static final int LEVEL_COUNT = 3;
+	private JLabel[] lblHighScores;
+	{
+	    lblHighScores = new JLabel[LEVEL_COUNT];
 
+	    for (int i = 0; i < LEVEL_COUNT; i++) {
+	        JLabel lbl = new JLabel("");
+	        lbl.setForeground(Color.BLACK);
+	        lbl.setFont(new Font("NSimSun", Font.BOLD, 36));
+	        lbl.setBounds(400, 150, 800, 50); 
+	        lbl.setOpaque(false);
+	        lbl.setVisible(false);
+
+	        lblHighScores[i] = lbl;
+
+	        SwingUtilities.invokeLater(() -> {
+	            getContentPane().add(lbl);
+	            getContentPane().setComponentZOrder(lbl, 0);
+	        });
+	    }
+	}
+
+	
+	
+	
 
 	
 	protected void updateControls() {
@@ -297,13 +322,24 @@ public class AnimationFrame extends JFrame {
 	        ShellUniverse shell = (ShellUniverse) universe;
 	        lblTime.setText(shell.getJetbatteryTime());
 	        lblAttempts.setText(shell.getTextOnScreen());
-
 	        if (shell.getMainScreen()) {
 	            gameTitle.setText("Ob's Odyssey");
 	        } else {
 	            gameTitle.setText("");
 	        }
+	        int currentLevel = shell.getCurrentLevelIndex();
 
+	        for (int i = 0; i < lblHighScores.length; i++) {
+	            if (!shell.getMainScreen() && i == currentLevel) {
+	                lblHighScores[i].setText(
+	                    "Best Time (Level " + (i + 1) + "): " +
+	                    String.format("%.2f", shell.getHighScore(i))
+	                );
+	                lblHighScores[i].setVisible(true);
+	            } else {
+	                lblHighScores[i].setVisible(false);
+	            }
+	        }
 	        
 	    }
 	}
