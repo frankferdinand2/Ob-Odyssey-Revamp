@@ -1,5 +1,5 @@
 ObSpeed 600
-JetpackBattery 6
+JetpackBattery 8
 
 # <object type> <x position> <y position> <width> <height> <image path>
 
