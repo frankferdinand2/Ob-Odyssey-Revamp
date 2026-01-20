@@ -195,8 +195,13 @@ public class ObSprite implements DisplayableSprite {
             jetBattery -= 0.1;
         }
         
-        if (keyboard.keyDown(78)) {
-            invincible = true;
+        if (keyboard.keyDownOnce(78)) {
+        	if (invincible == false) {
+        		invincible = true;
+        	}
+        	else {
+        		invincible = false ;
+        	}
         }
         velocityY += gravity * deltaTime;
         centerY += velocityY * deltaTime;
