@@ -262,7 +262,13 @@ public class ShellUniverse implements Universe {
         	   spawned = false;
            }
            
-           
+           if (sprite instanceof LevelButton && ((LevelButton) sprite).isClicked()) {
+        	   String path = ((LevelButton) sprite).getLevelPath();
+        	   sprites.clear();
+        	   highScores = false;
+        	   loadLevel(path);
+        	   
+           }
            if (sprite instanceof CharacterToSelect && ((CharacterToSelect) sprite).isClicked()) {
         	   obImagePath = ((CharacterToSelect) sprite).getImagePath();
         	   characterSelection = false;
@@ -305,8 +311,8 @@ public class ShellUniverse implements Universe {
             break;
         }
     }
-
-    if (infiniteMode) {
+    
+      if (infiniteMode) {
     	double cycleSpeed = 32000;
         double hue = (distance % cycleSpeed) / cycleSpeed; 
         Color lerped = Color.getHSBColor((float) hue, 1.0f, 1.0f);
@@ -364,7 +370,7 @@ public class ShellUniverse implements Universe {
                if (sprite instanceof LevelEndSprite) hasLevelEnd = true;
                loadedSprites.add(sprite);
            }
-       } catch (IOException e) { e.printStackTrace(); return false; }
+       } catch (IOException e) { e.printStackTrace();  return false; }
        if (!hasLevelEnd && !infiniteMode) return false;
        sprites.clear();
        sprites.addAll(loadedSprites);
@@ -411,10 +417,21 @@ public class ShellUniverse implements Universe {
    private void nextLevel() {
        nextLevel = false;
        sprites.clear();
-       currentLevelIndex++;
-       if (currentLevelIndex >= levels.length) { complete = true; return; }
+       if (currentLevelIndex < levels.length - 1) {
+           currentLevelIndex++;
+           
+       }
+       else {
+    	   mainScreen() ;
+    	   jetBatteryTime = "";
+    	   setTextOnScreen("");
+    	   return ;
+       }
+       if (currentLevelIndex >= levels.length) { mainScreen(); return; }
        currentLevelPath = levels[currentLevelIndex];
-       if (!loadLevel(currentLevelPath)) throw new RuntimeException("Failed to load next level: " + currentLevelPath);
+       if (!loadLevel(currentLevelPath)) {
+    	   mainScreen();
+       }
    }
    private void mainScreen() {
        sprites.clear();
@@ -428,6 +445,11 @@ public class ShellUniverse implements Universe {
    private void highScoreScreen() {
        sprites.clear();
        sprites.add(new HomeSprite(-550,-300));
+       int i = 0;
+       while (i < levels.length) {
+    	   sprites.add(new LevelButton(-550 + i * 175,-140, levels[i]));
+    	   i++;
+       }
        spawned = true;       
    }
    private void startInfiniteMode() {

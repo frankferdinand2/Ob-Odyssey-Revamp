@@ -295,7 +295,7 @@ public class AnimationFrame extends JFrame {
 	    infiniteHighScore = new JLabel("");
 	    infiniteHighScore.setForeground(Color.BLACK);
 	    infiniteHighScore.setFont(new Font("NSimSun", Font.BOLD, 36));
-	    infiniteHighScore.setBounds(436, -60, 1300, 200); 
+	    infiniteHighScore.setBounds(436, 0, 1300, 200); 
 	    infiniteHighScore.setOpaque(false);
 
 	    SwingUtilities.invokeLater(() -> {
@@ -345,9 +345,8 @@ public class AnimationFrame extends JFrame {
 	    infiniteHighScore.setText(shell.getTextInfinite());
 
 	    gameTitle.setText(shell.getMainScreen() ? "Ob's Odyssey" : "");
-
-	    int startY = 90;      
-	    int spacing = 60;    
+     
+	    int spacing = 175;    
 	    int labelWidth = 800;
 	    int labelHeight = 50;
 
@@ -356,11 +355,11 @@ public class AnimationFrame extends JFrame {
 	            JLabel lbl = lblHighScores[i];
 
 	            lbl.setText(
-	                "Level " + (i + 1) + " Best Time: " + String.format("%.2f", shell.getHighScore(i))
+	                String.format("%.2f", shell.getHighScore(i))
 	            );
 
-	            int x = 400;
-	            int y = startY + i * spacing;
+	            int x = 50 + i * spacing;
+	            int y = 260;
 
 	            lbl.setBounds(x, y, labelWidth, labelHeight);
 	            lbl.setVisible(true);
