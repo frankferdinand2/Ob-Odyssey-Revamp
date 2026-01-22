@@ -263,12 +263,28 @@ public class ShellUniverse implements Universe {
            }
            
            if (sprite instanceof LevelButton && ((LevelButton) sprite).isClicked()) {
-        	   String path = ((LevelButton) sprite).getLevelPath();
-        	   sprites.clear();
-        	   highScores = false;
-        	   loadLevel(path);
-        	   
-           }
+        	    String path = ((LevelButton) sprite).getLevelPath();
+
+        	    for (int j = 0; j < levels.length; j++) {
+        	        if (levels[j].equals(path)) {
+        	            currentLevelIndex = j;
+        	            break;
+        	        }
+        	    }
+
+        	    currentLevelPath = path;
+        	    sprites.clear();
+        	    highScores = false;
+        	    attempts = 0;
+        	    levelTimer = 0;
+        	    nextLevel = false;
+        	    resetLevel = false;
+        	    mainScreen = false;
+
+        	    loadLevel(currentLevelPath);
+        	    return;
+        	}
+
            if (sprite instanceof CharacterToSelect && ((CharacterToSelect) sprite).isClicked()) {
         	   obImagePath = ((CharacterToSelect) sprite).getImagePath();
         	   characterSelection = false;
