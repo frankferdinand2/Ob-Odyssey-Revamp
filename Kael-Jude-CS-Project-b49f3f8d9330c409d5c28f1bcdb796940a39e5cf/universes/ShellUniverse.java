@@ -681,7 +681,7 @@ public class ShellUniverse implements Universe {
                lastPortal = 0;
                lastCharge++;
                
-           } else { // spawn spikes
+           } else { // spawn spikes (default spawn)
                String img = "res/SpriteImages/SpikeImages/Box200x200.png";
                SpikeSprite spike = new SpikeSprite(x, y, width, height, img);
                pendingSprites.add(spike);
@@ -719,6 +719,7 @@ public class ShellUniverse implements Universe {
 	   sprites.add(new CharacterToSelect(-300, -55, "res/SpriteImages/mercedes.png"));
 	   sprites.add(new CharacterToSelect(300, -55, "res/star.png"));
 	   sprites.add(new CharacterToSelect(300, 55, "res/humpty.png"));
+	   sprites.add(new CharacterToSelect(400, 55, "res/SpriteImages/ezmode.png"));
    }
    
    public String getTextOnScreen() {
