@@ -318,7 +318,6 @@ public class ObSprite implements DisplayableSprite {
         flapVelocity = -300;
         happened = false;
 
-        baseImage = normalImage;
         currentImage = baseImage;
     }
 }
