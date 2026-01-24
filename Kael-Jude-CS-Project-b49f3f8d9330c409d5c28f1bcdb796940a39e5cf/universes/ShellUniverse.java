@@ -18,7 +18,7 @@ public class ShellUniverse implements Universe {
    private double jetpackBattery;
    private String currentLevelPath;
    private boolean resetLevel = false;
-   private String[] levels = {"res/LevelData/tutorial.txt", "res/LevelData/level2.txt", "res/LevelData/level3.txt", "res/LevelData/level4.txt", "res/LevelData/level5.txt", "res/LevelData/level6.txt", "res/LevelData/level7.txt"};
+   private String[] levels = {"res/LevelData/tutorial.txt", "res/LevelData/level8.txt", "res/LevelData/level2.txt", "res/LevelData/level3.txt", "res/LevelData/level4.txt", "res/LevelData/level5.txt", "res/LevelData/level6.txt", "res/LevelData/level7.txt"};
    private int currentLevelIndex = 0;
    private boolean nextLevel = false;
    private boolean mainScreen = false;
