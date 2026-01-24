@@ -305,7 +305,7 @@ public class AnimationFrame extends JFrame {
 	    });
 	}
 	
-	private static final int LEVEL_COUNT = 6;
+	private static final int LEVEL_COUNT = 12;
 	
 	private JLabel[] lblHighScores;
 	{
@@ -360,9 +360,9 @@ public class AnimationFrame extends JFrame {
 	            int x = 50 + i * spacing;
 	            int y = 260;
 	            
-	            if (i > 3) {
+	            if (i > 6) {
 	            	y = 450;
-	            	x = 50 + (i-4) * spacing;
+	            	x = 50 + (i-7) * spacing;
 	            }
 	            lbl.setBounds(x, y, labelWidth, labelHeight);
 	            lbl.setVisible(true);

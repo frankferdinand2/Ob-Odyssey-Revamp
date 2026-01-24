@@ -18,7 +18,7 @@ public class ShellUniverse implements Universe {
    private double jetpackBattery;
    private String currentLevelPath;
    private boolean resetLevel = false;
-   private String[] levels = {"res/LevelData/tutorial.txt", "res/LevelData/level8.txt", "res/LevelData/level2.txt", "res/LevelData/level3.txt", "res/LevelData/level4.txt", "res/LevelData/level5.txt", "res/LevelData/level6.txt", "res/LevelData/level7.txt"};
+   private String[] levels = {"res/LevelData/tutorial.txt", "res/LevelData/level2.txt", "res/LevelData/level11.txt", "res/LevelData/level12.txt", "res/LevelData/level8.txt", "res/LevelData/level10.txt", "res/LevelData/level9.txt", "res/LevelData/level3.txt", "res/LevelData/level4.txt", "res/LevelData/level5.txt", "res/LevelData/level6.txt", "res/LevelData/level7.txt"};
    private int currentLevelIndex = 0;
    private boolean nextLevel = false;
    private boolean mainScreen = false;
@@ -465,9 +465,9 @@ public class ShellUniverse implements Universe {
     	   int y = -140;
     	   int x = -550 + i * 175;
     	   
-    	   if (i > 3) {
+    	   if (i > 6) {
     		   y = 50;
-    		   x = -550 + (i-4) * 175;
+    		   x = -550 + (i-7) * 175;
     	   }
     	   sprites.add(new LevelButton(x, y, levels[i], i +1));
     	   i++;
