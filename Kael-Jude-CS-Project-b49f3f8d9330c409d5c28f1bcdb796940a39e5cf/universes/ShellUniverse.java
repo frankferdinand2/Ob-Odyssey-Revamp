@@ -451,10 +451,9 @@ public class ShellUniverse implements Universe {
    }
    private void mainScreen() {
        sprites.clear();
-       sprites.add(new PlaySprite(0,200));
        sprites.add(new InfiniteButton(0, -200));
        sprites.add(new CharacterSelectionInitiate(-500, 0));
-       sprites.add(new HighScoreScreen(500, 0));
+       sprites.add(new HighScoreScreen(0, 200));
        spawned = true;       
    }
    
@@ -463,7 +462,14 @@ public class ShellUniverse implements Universe {
        sprites.add(new HomeSprite(-550,-300));
        int i = 0;
        while (i < levels.length) {
-    	   sprites.add(new LevelButton(-550 + i * 175,-140, levels[i]));
+    	   int y = -140;
+    	   int x = -550 + i * 175;
+    	   
+    	   if (i > 3) {
+    		   y = 50;
+    		   x = -550 + (i-4) * 175;
+    	   }
+    	   sprites.add(new LevelButton(x, y, levels[i], i +1));
     	   i++;
        }
        spawned = true;       

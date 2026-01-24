@@ -5,7 +5,7 @@ import javax.imageio.ImageIO;
 
 public class HighScoreScreen implements DisplayableSprite {
   
-	private static final String IMAGE_PATH = "res/lambo.jpg";
+	private static final String IMAGE_PATH = "res/SpriteImages/PlayButton.png";
 	private static final double WIDTH = 350;
 	private static final double HEIGHT = 100;
 

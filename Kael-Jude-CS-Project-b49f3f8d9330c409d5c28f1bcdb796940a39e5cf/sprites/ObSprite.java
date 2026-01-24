@@ -21,7 +21,7 @@ public class ObSprite implements DisplayableSprite {
     private double flapVelocity = -300;
     private double jetBattery = 2000;
     private boolean loadFrame = false;
-    private boolean wasOnGround = false;
+    private boolean wasOnGround = false; 
     private boolean wasOnRoof = false;
     private static Image normalImage;
     private double originalJetpackBattery;
@@ -190,7 +190,7 @@ public class ObSprite implements DisplayableSprite {
             if (jetBattery < 0) jetBattery = 0;
         }
 
-        if (flappyMode && keyboard.keyDownOnce(38)) {
+        if (flappyMode && keyboard.keyDownOnce(38) && jetActive) {
             velocityY = flapVelocity;
             jetBattery -= 0.1;
         }

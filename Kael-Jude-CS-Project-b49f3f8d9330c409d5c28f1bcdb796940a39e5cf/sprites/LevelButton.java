@@ -5,24 +5,24 @@ import javax.imageio.ImageIO;
 
 public class LevelButton implements DisplayableSprite {
   
-	private static final String IMAGE_PATH = "res/SpriteImages/PlayButton.png";
 	private static final double WIDTH = 100;
 	private static final double HEIGHT = 100;
 
-	private static Image image;
-	
+	private Image image;
 	private double centerX;
 	private double centerY;
 	private double width;
 	private double height;
 	private boolean dispose;
 	private String levelPath = "";
+	private int level = -1;
 	
-	public LevelButton(double centerX, double centerY, String levelPath) {
+	public LevelButton(double centerX, double centerY, String levelPath, int level) {
 		this.centerX = centerX;
 		this.centerY = centerY;
 		this.width = WIDTH;
 		this.height = HEIGHT;
+		this.level = level;
 		loadImage();
 		this.levelPath = levelPath;
 	}
@@ -30,7 +30,7 @@ public class LevelButton implements DisplayableSprite {
 	private void loadImage() {
 		if (image == null) {
 			try {
-				image = ImageIO.read(new File(IMAGE_PATH));
+				image = ImageIO.read(new File("res/LevelNumbers/LevelNum" + level + ".png"));
 			} catch (IOException e) {
 				System.err.println("Error loading image: " + e);
 			}
