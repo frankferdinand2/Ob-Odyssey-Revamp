@@ -5,7 +5,7 @@ import javax.imageio.ImageIO;
 
 public class ReverseGravityPortalSprite implements DisplayableSprite {
   
-	private static final String IMAGE_PATH = "res/chicken.jpg";
+	private static final String IMAGE_PATH = "res/SpriteImages/ReverseGravitySprite.png";
 	private static final double DEFAULT_WIDTH = 200.0;
 	private static final double DEFAULT_HEIGHT = 200.0;
 

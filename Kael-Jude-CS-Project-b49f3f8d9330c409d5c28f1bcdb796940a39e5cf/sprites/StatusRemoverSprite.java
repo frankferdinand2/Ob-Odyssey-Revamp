@@ -6,7 +6,7 @@ import javax.imageio.ImageIO;
 
 public class StatusRemoverSprite implements DisplayableSprite {
   
-	private static final String IMAGE_PATH = "res/Cow.jpg";
+	private static final String IMAGE_PATH = "res/SpriteImages/StatusRemoverSprite.png";
 	private static final double DEFAULT_WIDTH = 200.0;
 	private static final double DEFAULT_HEIGHT = 200.0;
 

@@ -6,7 +6,7 @@ import javax.imageio.ImageIO;
 
 public class FlappyBirdPortalSprite implements DisplayableSprite {
   
-	private static final String IMAGE_PATH = "res/lambo.jpg";
+	private static final String IMAGE_PATH = "res/spriteImages/FlappyModeSprite.png";
 
 	private static Image image;
 
