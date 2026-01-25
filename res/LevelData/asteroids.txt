@@ -1,12 +1,12 @@
 ObSpeed 600
-JetpackBattery 9
+JetpackBattery 5
 
 # <object type> <x position> <y position> <width> <height> <image path>
 
 
 # FOR 1 BIG IMAGE: 680px tall, -19 offset
-Spike 3000 -19 5000 680 res/SpriteImages/asteroids.png
+Spike 7700 -19 15000 680 res/SpriteImages/SpikeImages/auralevel.png
 
-LevelEnding 5700 0 500 500
+LevelEnding 15100 0 500 500
 
 
