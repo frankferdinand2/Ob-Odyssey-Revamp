@@ -43,6 +43,7 @@ public class ObSprite implements DisplayableSprite {
     private boolean found = false;
     private boolean invincible = false;
     private boolean boing = false;
+    private boolean slow = false;
 
     public ObSprite(double centerX, double centerY) {
         this.centerX = centerX;
@@ -148,7 +149,13 @@ public class ObSprite implements DisplayableSprite {
         double deltaTime = actualDeltaTime * 0.001;
         ShellUniverse u = (ShellUniverse) universe;
         String shellPath = u.getObImagePath();
-
+        double multiplier = 1;
+        if (slow) {
+        	multiplier = 0.3;
+        }
+        else {
+        	multiplier = 1;
+        }
         boing = "res/SpriteImages/goofychicken.png".equals(shellPath);
 
         if (loadFrame) {
@@ -185,13 +192,13 @@ public class ObSprite implements DisplayableSprite {
         boolean jetActive = keyboard.keyDown(38) && jetBattery > 0;
 
         if (jetActive && !flappyMode) {
-            velocityY += jetPower * deltaTime;
+            velocityY += jetPower * deltaTime * multiplier;
             jetBattery -= deltaTime;
             if (jetBattery < 0) jetBattery = 0;
         }
 
         if (flappyMode && keyboard.keyDownOnce(38) && jetActive) {
-            velocityY = flapVelocity;
+            velocityY = flapVelocity * multiplier;
             jetBattery -= 0.1;
         }
         
@@ -203,8 +210,10 @@ public class ObSprite implements DisplayableSprite {
         		invincible = false ;
         	}
         }
-        velocityY += gravity * deltaTime;
+        
+        velocityY += gravity * deltaTime * multiplier; 
         centerY += velocityY * deltaTime;
+
 
         boolean onGroundNow = centerY + (height / 2) >= GROUND_Y;
 
@@ -235,7 +244,7 @@ public class ObSprite implements DisplayableSprite {
 
         
         wasOnRoof = onRoofNow;
-
+        slow = false;
         for (DisplayableSprite sprite : universe.getSprites()) {
 
             if (sprite instanceof ReverseGravityPortalSprite && checkCollision(sprite) && !reversed) {
@@ -300,6 +309,26 @@ public class ObSprite implements DisplayableSprite {
                     dispose = true;
                 }
             }
+            
+            if (sprite instanceof Water && checkCollision(sprite)) {
+                slow = true;
+
+                double maxWaterFallSpeed = 200; 
+                if (velocityY > maxWaterFallSpeed) {
+                    velocityY -= 5000 * deltaTime;
+                }
+
+                if (velocityY > 0) {
+                    velocityY -= 50 * deltaTime; 
+                }
+                else if (velocityY < 0) {
+                	velocityY += 50 * deltaTime;
+                }
+            } else {
+                slow = false;
+            }
+
+      
         }
     }
 

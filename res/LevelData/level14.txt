@@ -1,0 +1,17 @@
+ObSpeed 600
+JetpackBattery 50
+
+# <object type> <x position> <y position> <width> <height> <image path>
+
+
+# FOR 1 BIG IMAGE: 680px tall, -19 offset
+
+Water 400 200 10000 300
+Water 10229.5 0 5300 800
+FlappyBirdPortal 0 0 200 200
+StatusRemover 6500 0
+ReverseGravityPortal 7700 0
+Spike 8700 -19 20000 680 res/SpriteImages/waterworld.png
+LevelEnding 19400 0 500 500
+
+

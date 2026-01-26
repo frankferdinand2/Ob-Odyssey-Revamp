@@ -18,7 +18,7 @@ public class ShellUniverse implements Universe {
    private double jetpackBattery;
    private String currentLevelPath;
    private boolean resetLevel = false;
-   private String[] levels = {"res/LevelData/tutorial.txt", "res/LevelData/level2.txt", "res/LevelData/level11.txt", "res/LevelData/level12.txt", "res/LevelData/level8.txt", "res/LevelData/level10.txt", "res/LevelData/level9.txt", "res/LevelData/level13.txt", "res/LevelData/level3.txt", "res/LevelData/asteroids.txt", "res/LevelData/level4.txt", "res/LevelData/level5.txt", "res/LevelData/level6.txt", "res/LevelData/level7.txt"};
+   private String[] levels = {"res/LevelData/tutorial.txt", "res/LevelData/level2.txt", "res/LevelData/level11.txt", "res/LevelData/level12.txt", "res/LevelData/level8.txt", "res/LevelData/level10.txt", "res/LevelData/level9.txt", "res/LevelData/level13.txt", "res/LevelData/level3.txt", "res/LevelData/asteroids.txt", "res/LevelData/level4.txt", "res/LevelData/level5.txt", "res/LevelData/level14.txt", "res/LevelData/level6.txt", "res/LevelData/level7.txt"};
    private int currentLevelIndex = 0;
    private boolean nextLevel = false;
    private boolean mainScreen = false;
@@ -205,8 +205,10 @@ public class ShellUniverse implements Universe {
         		        
         		        break; 
         		    }
+        		 
         		
            }
+
            if (sprite instanceof ObSprite) {
                ObSprite ob = (ObSprite) sprite;
                if (ob.getLevelComplete() && !infiniteMode) {
@@ -295,6 +297,11 @@ public class ShellUniverse implements Universe {
         	   attempts = 0;
         	   
            }
+           
+        //   if (sprite instanceof ReverseGravityPortalSprite || sprite instanceof FlappyBirdPortalSprite || sprite instanceof StatusRemoverSprite || sprite instanceof BackgroundSprite) {
+      //  	   sprites.remove(sprite);
+       // 	   sprites.add(sprite);
+      //     }
        
            
        }
@@ -389,10 +396,21 @@ public class ShellUniverse implements Universe {
        } catch (IOException e) { e.printStackTrace();  return false; }
        if (!hasLevelEnd && !infiniteMode) return false;
        sprites.clear();
-       sprites.addAll(loadedSprites);
-       sprites.add(new JetpackSprite(-400,0));
-       sprites.add(new ObSprite(-400,0));
+
+       ArrayList<DisplayableSprite> water = new ArrayList<>();
+
+       for (DisplayableSprite s : loadedSprites) {
+           if (s instanceof Water) {
+               water.add(s);
+           } else {
+               sprites.add(s);  
+           }
+       }
+       sprites.add(new JetpackSprite(-400, 0));
+       sprites.add(new ObSprite(-400, 0)); 
+       sprites.addAll(water);            
        sprites.add(new HomeSprite(-550, -300));
+
        return true;
    }
    private DisplayableSprite parseSprite(String[] t, int lineNumber) {
@@ -406,6 +424,10 @@ public class ShellUniverse implements Universe {
                case "Floor":
                    if (t.length != 5) break;
                    return new FloorSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]), Double.parseDouble(t[3]), Double.parseDouble(t[4]));
+               case "Background":
+                   if (t.length != 6) break;
+                   String imagPath = (t.length == 6 && !t[5].isEmpty()) ? t[5] : "res/red.jpg";
+                   return new BackgroundSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]), Double.parseDouble(t[3]), Double.parseDouble(t[4]), imagPath);
                case "Wall":
                    if (t.length != 3) break;
                    return new WallSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]));
@@ -421,6 +443,9 @@ public class ShellUniverse implements Universe {
                case "FlappyBirdPortal":
                    if (t.length != 5) break;
                    return new FlappyBirdPortalSprite(Double.parseDouble(t[1]), Double.parseDouble(t[2]), Double.parseDouble(t[3]), Double.parseDouble(t[4]));
+               case "Water":
+                   if (t.length != 5) break;
+                   return new Water(Double.parseDouble(t[1]), Double.parseDouble(t[2]), Double.parseDouble(t[3]), Double.parseDouble(t[4]));
            }
        } catch (NumberFormatException e) { return null; }
        return null;
@@ -468,6 +493,10 @@ public class ShellUniverse implements Universe {
     	   if (i > 6) {
     		   y = 50;
     		   x = -550 + (i-7) * 175;
+    	   }
+    	   if (i > 13) {
+    		   y = 170;
+    		   x = -550 + (i-14) * 175;
     	   }
     	   sprites.add(new LevelButton(x, y, levels[i], i +1));
     	   i++;
