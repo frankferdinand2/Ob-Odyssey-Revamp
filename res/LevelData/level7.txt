@@ -6,7 +6,7 @@ JetpackBattery 45
 
 # FOR 1 BIG IMAGE: 680px tall, -19 offset
 
-Background 14500 -19 30000 680 res/SpriteImages/SpikeImages/leveldreamback.png
+# Background 14500 -19 30000 680 res/SpriteImages/SpikeImages/leveldreamback.png
 
 Spike 14500 -19 30000 680 res/SpriteImages/SpikeImages/leveldream.png
 
